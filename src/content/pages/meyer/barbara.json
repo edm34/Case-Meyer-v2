@@ -1,0 +1,22 @@
+{
+  "title": "Barbara Meyer",
+  "description": "Barbara Meyer de Garate.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>[A short life of Barbara Meyer de Garate: where she was born and grew up, her family, her work and interests, and her years in the house. To be written with the family.]</p>"
+    },
+    {
+      "type": "image",
+      "placement": "centre",
+      "image": {
+        "src": "/images/barbara-and-luis.jpg",
+        "alt": "Black and white print of Barbara Meyer in a headscarf beside Luis Barragán in a hat and glasses",
+        "width": 1500,
+        "height": 1125,
+        "caption": "Barbara Meyer.",
+        "credit": "Family collection"
+      }
+    }
+  ]
+}

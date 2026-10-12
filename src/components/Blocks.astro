@@ -1,0 +1,114 @@
+---
+/**
+ * Renders an article from its block list. Blocks are placed in document
+ * order into the wrapping flex row; a "break" starts a new row. A text block
+ * placed left or right pairs with the next/previous side image in the same row.
+ */
+import type { Block } from '../content.config';
+import Carousel from './Carousel.astro';
+import BookingForm from './BookingForm.astro';
+import { url } from '../lib/url';
+const { blocks, imageMax } = Astro.props as { blocks: Block[]; imageMax?: string };
+
+const isPortrait = (img: { width?: number; height?: number }) => !!(img.width && img.height && img.width / img.height < 1.2);
+let prevType = '';
+// Side-placed text and images share a row; everything else ends its row.
+const endsRow = (b: Block) => !((b.type === 'text' || b.type === 'image') && b.placement !== 'centre');
+---
+{blocks.map((b, idx) => {
+  const afterIntro = prevType === 'intro';
+  prevType = b.type;
+  const next = blocks[idx + 1];
+  const br = endsRow(b) && next && next.type !== 'break' ? <div class="break" /> : null;
+  const node = (() => { switch (b.type) {
+    case 'intro': return <div class="b-intro reveal" set:html={b.html} />;
+    case 'large': return <div class="b-large reveal" set:html={b.html} />;
+    case 'text': return <div class:list={['b-text reveal', `b-text--${b.placement}`]} set:html={b.html} />;
+    case 'image': return (
+      <div class:list={['b-image reveal', `b-image--${b.placement}`, { 'after-intro': afterIntro && b.placement === 'centre', 'is-portrait': b.placement === 'centre' && isPortrait(b.image) }]} data-lightbox={b.placement !== 'centre' ? '' : undefined}>
+        <figure>
+          <img src={url(b.image.src)} alt={b.image.alt} width={b.image.width} height={b.image.height} loading="lazy" />
+          {(b.image.caption || b.image.credit) && <figcaption>{b.image.caption}{b.image.credit && <span class="credit">{b.image.credit}</span>}</figcaption>}
+        </figure>
+      </div>
+    );
+    case 'gallery': return <div class="reveal" style="width:100%"><Carousel slides={b.images} size={b.size} maxH={imageMax} /></div>;
+    case 'break': return <div class="break" />;
+    case 'subheading': return <h2 class="b-sub reveal">{b.text}</h2>;
+    case 'row': return (
+      <div class="rows"><div class="row reveal" data-lightbox>
+        {b.image && (
+          <figure class:list={['row__thumb', `row__thumb--${b.side}`]}>
+            <img src={url(b.image.src)} alt={b.image.alt} loading="lazy" />
+            {(b.image.caption || b.image.credit) && <figcaption>{b.image.caption}{b.image.credit && <span class="credit"> {b.image.credit}</span>}</figcaption>}
+          </figure>
+        )}
+        {b.title && <h3 class="row__title">{b.title}</h3>}
+        <div class="row__text" set:html={b.html} />
+      </div></div>
+    );
+    case 'faq': return (
+      <div class="faq reveal" data-faq>
+        <h3 class="faq__q"><button type="button" aria-expanded="false" data-faq-btn><span class="faq__icon" aria-hidden="true"></span>{b.question}</button></h3>
+        <div class="faq__a" data-faq-panel><div class="faq__inner" set:html={b.html} /></div>
+      </div>
+    );
+    case 'video': return <div class="b-video b-video--article reveal"><iframe src={b.url} title="Video" allow="fullscreen" loading="lazy"></iframe></div>;
+    case 'small': return <div class="b-small reveal" set:html={b.html} />;
+    case 'form': return <BookingForm />;
+    case 'downloads': return (
+      <div class="dl">
+        {b.groups.map((g) => (
+          <section class="dl__group reveal">
+            <h2 class="dl__title">{g.title}</h2>
+            <ul class="dl__list">
+              {g.files.map((f) => (
+                <li class="dl__item">
+                  <img src={url(f.thumb)} alt="" loading="lazy" />
+                  <a class="pill pill--small" href={url(f.href)} download>{f.label}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    );
+  } })();
+  return <>{node}{br}</>;
+})}
+<style is:global>
+  /* FAQ */
+  .faq { width: var(--col-7); margin-bottom: 1rem; }
+  .faq__q { font: 400 2.3rem/1.1 var(--font-sans); color: var(--ink); margin-bottom: 1rem; position: relative; }
+  .faq__q button { text-align: left; width: 100%; color: inherit; }
+  .faq__icon { position: absolute; left: -2.3rem; top: .35em; width: 1.5rem; height: 1.5rem; border: 1px solid var(--black); border-radius: 50%; }
+  .faq__icon::before, .faq__icon::after { content: ""; position: absolute; background: var(--black); left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .faq__icon::before { width: .7rem; height: 1px; }
+  .faq__icon::after { width: 1px; height: .7rem; }
+  [aria-expanded="true"] .faq__icon::after { display: none; }
+  .faq__a { max-height: 0; overflow: hidden; transition: max-height var(--t-accordion); }
+  .faq__inner { font: 400 1.3rem/1.6rem var(--font-serif); letter-spacing: .05rem; color: var(--ink); padding-bottom: 4rem; }
+  .faq__inner p { margin: 0 0 1.6rem; }
+  @media (max-width: 767px) { .faq { width: 80vw; } .faq__q { font-size: 1.7rem; } }
+
+  /* downloads */
+  .dl { width: 100%; display: flex; flex-wrap: wrap; padding: 0 2rem; }
+  .dl__group { width: 50%; }
+  .dl__title { font: 400 1.5rem/1.1 var(--font-sans); padding-top: 4rem; margin-bottom: 1rem; }
+  .dl__list { display: flex; flex-wrap: wrap; gap: 0 2rem; align-items: flex-start; }
+  .dl__item { width: calc(13vw - 1rem); margin-bottom: 3rem; }
+  .dl__item img { aspect-ratio: 4 / 3; object-fit: contain; background: var(--panel-soft); }
+  .dl__item .pill { margin-top: .5rem; }
+  @media (max-width: 767px) { .dl { padding: 0 1rem; } .dl__group { width: 100%; } .dl__item { width: calc(50% - 1rem); } }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>('[data-faq-btn]')!;
+    const panel = item.querySelector<HTMLElement>('[data-faq-panel]')!;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.style.maxHeight = open ? '0px' : panel.scrollHeight + 'px';
+    });
+  });
+</script>

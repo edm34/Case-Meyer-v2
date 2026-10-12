@@ -1,42 +1,38 @@
 ---
-import { site } from '../lib/site';
+import { sections, legal, brand } from '../lib/site';
 import { url } from '../lib/url';
+const { flush = false } = Astro.props as { flush?: boolean };
 const year = new Date().getFullYear();
 ---
-<footer class="footer">
-  <div class="footer__band" aria-hidden="true">
-    <span class="block block--yellow"></span>
-    <span class="block block--pink"></span>
-    <span class="block block--paper"></span>
+<footer class:list={['ftr', { 'ftr--flush': flush }]}>
+  <div class="ftr__nav">
+    {sections.map((s) => (
+      <nav aria-label={s.label}>
+        <h2>{s.label}</h2>
+        <ul>{s.children.map((c) => <li><a href={url(`/${s.slug}/${c.slug}/`)}>{c.label}</a></li>)}</ul>
+      </nav>
+    ))}
   </div>
-  <div class="wrap footer__inner">
-    <div class="footer__col">
-      <p class="t-label">Casa Meyer</p>
-      <p class="t-sm t-grey">Luis Barragán, 1978<br />Bosques de las Lomas, Mexico City</p>
-    </div>
-    <div class="footer__col">
-      <p class="t-label">Visit</p>
-      <p class="t-sm t-grey">Private visits by appointment.<br /><a href={url('/visit/')}>Request a visit</a></p>
-    </div>
-    <div class="footer__col">
-      <p class="t-label">Index</p>
-      <ul class="t-sm">
-        {site.nav.map((i) => <li><a href={url(i.href)}>{i.label}</a></li>)}
-      </ul>
-    </div>
-    <div class="footer__col footer__col--end">
-      <p class="t-sm t-grey">© {year} Casa Meyer. Drawings and photographs reproduced by permission of the family. <a href={url('/colophon/')}>Colophon</a></p>
-    </div>
-  </div>
+  <p class="ftr__legal">
+    {legal.map((l, i) => <><a href={url(`/${l.slug}/`)}>{l.label}</a>{' — '}</>)}
+    © {brand.name} {year}. Drawings and photographs reproduced by permission of the family.
+  </p>
 </footer>
-
 <style>
-  .footer { margin-top: clamp(48px, 8vw, 128px); border-top: 1px solid var(--rule); }
-  .footer__band { display: grid; grid-template-columns: 3fr 2fr 1fr; height: 14px; }
-  .footer__inner { display: grid; gap: 28px var(--gutter); padding-top: 40px; padding-bottom: 40px; grid-template-columns: 1fr 1fr; }
-  @media (min-width: 900px) { .footer__inner { grid-template-columns: repeat(4, 1fr); } }
-  .footer__col p + p, .footer__col p + ul { margin-top: 10px; }
-  .footer__col a:hover { color: var(--pink); }
-  .footer__col--end { grid-column: 1 / -1; }
-  @media (min-width: 900px) { .footer__col--end { grid-column: auto; } }
+  .ftr { display: flex; flex-wrap: wrap; justify-content: center; border-top: 1px solid var(--black); margin: 5rem 0 2rem; }
+  .ftr--flush { margin-top: 0; }
+  .ftr__nav { display: flex; width: var(--col-6); padding-top: 3rem; }
+  .ftr__nav nav { width: 25%; }
+  .ftr__nav h2 { font-size: 1rem; margin: 0 0 .2rem; color: var(--black); }
+  .ftr__nav li { font-size: 1rem; line-height: 1.3; }
+  .ftr__nav a, .ftr__legal, .ftr__legal a { color: var(--grey); }
+  .ftr__nav a:hover, .ftr__legal a:hover { color: var(--black); }
+  .ftr__legal { width: var(--col-7); margin: 3rem 0 0; text-align: center; font-size: .8rem; line-height: 1.2; }
+  @media (max-width: 767px) {
+    .ftr { margin: 5rem 0 1rem; padding: 0 1rem; }
+    .ftr__nav { width: 100%; flex-wrap: wrap; padding-top: 0; }
+    .ftr__nav nav { width: 50%; margin-top: 2rem; }
+    .ftr__nav h2, .ftr__nav li { font-size: 1.5rem; }
+    .ftr__legal { width: 100%; font-size: max(.8rem, 12px); }
+  }
 </style>

@@ -4,23 +4,20 @@
     "name": "House Tour",
     "duration": "60 minutes",
     "price": "Price to be confirmed",
-    "text": "A guided walk through the house and garden, following the sequence of walls, light and color as Barragán laid it out.",
-    "placeholder": true
+    "html": "<p>A guided walk through the house and garden.</p>"
   },
   {
     "id": "architecture-tour",
     "name": "Architecture Tour",
     "duration": "90 minutes",
     "price": "Price to be confirmed",
-    "text": "An extended visit with the original drawings, looking closely at proportion, material and the handling of light.",
-    "placeholder": true
+    "html": "<p>An extended visit with the original drawings.</p>"
   },
   {
     "id": "private-visit",
     "name": "Private Visit",
     "duration": "By arrangement",
     "price": "Price to be confirmed",
-    "text": "An exclusive visit for a small group, arranged around your schedule.",
-    "placeholder": true
+    "html": "<p>An exclusive visit for a small group.</p>"
   }
 ]

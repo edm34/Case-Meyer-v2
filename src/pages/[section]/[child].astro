@@ -1,0 +1,20 @@
+---
+/** Article pages assembled from blocks, one per file in src/content/pages/<section>/<child>.json */
+import SectionPage from '../../layouts/SectionPage.astro';
+import Blocks from '../../components/Blocks.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (p) => !p.id.startsWith('legal/'));
+  return pages.map((p) => {
+    const [section, child] = p.id.split('/');
+    return { params: { section, child }, props: { entry: p } };
+  });
+}
+const { entry } = Astro.props;
+const { section, child } = Astro.params;
+const d = entry.data;
+---
+<SectionPage section={section!} child={child!} title={d.title} description={d.description}>
+  <Blocks blocks={d.blocks} />
+</SectionPage>

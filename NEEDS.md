@@ -4,10 +4,7 @@ The scaffold is complete and builds. These are the inputs that would make it rea
 
 ## 1. Reference: the Barragan Foundation site
 
-This environment cannot reach barragan-foundation.org. To mirror its flow closely I need to see it. Either:
-
-- Screenshots or a screen recording of: the homepage as it loads, after scrolling, the open menu, the Works index, one Work page, the Chronology, the Archive page. Phone screenshots are fine.
-- Or open this project in the Claude Desktop app (or run `claude remote-control` in the project folder) so the Chrome extension is available and I can walk the site myself.
+Done. The build follows the specification you supplied (`docs/DESIGN-SPEC.md`). Decisions I took and you may want to change: Jost and Source Serif 4 as the free typefaces; "La" as the hover prefix before "Casa"; the lattice pink for bullets and active states and the gate yellow for the home feature band where the reference uses greys; sub-pages open scrolled 20vw as on the reference.
 
 ## 2. Photographs
 

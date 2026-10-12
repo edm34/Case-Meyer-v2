@@ -1,0 +1,39 @@
+---
+/** Child pages of the current section as a row of very large links; shrinks and sticks on scroll. */
+import type { Section } from '../lib/site';
+import { url } from '../lib/url';
+const { section, active } = Astro.props as { section: Section; active: string };
+---
+<nav class="subnav" aria-label={`${section.label} pages`}>
+  <ul>
+    {section.children.map((c) => (
+      <li><a href={url(`/${section.slug}/${c.slug}/`)} aria-current={c.slug === active ? 'page' : undefined} data-subnav-link>{c.label}</a></li>
+    ))}
+  </ul>
+</nav>
+<style>
+  .subnav { position: sticky; top: 1rem; z-index: 1004; margin-top: 6rem; }
+  .subnav ul { display: flex; justify-content: space-between; margin: 0 auto;
+               height: calc(10rem - 5rem * var(--sp));
+               width: calc(100% - (100% - var(--subnav-compact)) * var(--sp)); }
+  .subnav li { font-family: var(--font-sans); letter-spacing: -.05em; white-space: nowrap; text-align: center;
+               font-size: calc(5rem - 2.5rem * var(--sp)); line-height: calc(5.5rem - 1.5rem * var(--sp)); }
+  .subnav a { color: var(--black); }
+  .subnav a::before, .subnav a::after { content: "●"; color: transparent; }
+  .subnav a:hover::before, .subnav a:focus-visible::before, .subnav a[aria-current]::before { color: var(--accent); }
+  @media (max-width: 767px) {
+    .subnav { position: static; }
+    .subnav ul { display: block; width: 100%; height: auto; }
+    .subnav li { font-size: 2.5rem; line-height: 1.1; }
+  }
+</style>
+<script>
+  // Clicking the active link smooth-scrolls back to the opening position (20vw).
+  document.querySelectorAll<HTMLAnchorElement>('[data-subnav-link][aria-current]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      if (matchMedia('(max-width: 767px)').matches) return;
+      e.preventDefault();
+      window.scrollTo({ top: innerWidth * 0.2, behavior: 'smooth' });
+    });
+  });
+</script>

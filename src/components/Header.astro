@@ -1,92 +1,77 @@
 ---
-import { site } from '../lib/site';
+/**
+ * The split wordmark is the navigation: one large word in each top corner,
+ * a second link that slides in beneath on hover, a round bullet as the only
+ * state indicator. Scroll-linked shrink via --hp (set in Base.astro).
+ */
+import { brand, corners, firstChildPath } from '../lib/site';
 import { url } from '../lib/url';
-const { overlay = false } = Astro.props as { overlay?: boolean };
-const path = Astro.url.pathname;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const isActive = (href: string) => path.startsWith(`${base}${href}`);
+const { activeSection = '', variant = 'page' } = Astro.props as { activeSection?: string; variant?: 'home' | 'page' | 'detail' };
+const L = corners.left, R = corners.right;
+const cur = (key: string) => (activeSection === key ? 'true' : undefined);
 ---
-<header class:list={['header', { 'header--overlay': overlay }]} id="header">
-  <div class="header__inner">
-    <a class="header__brand t-label" href={url('/')} aria-label="Casa Meyer, home">
-      <span class="header__mark" aria-hidden="true"></span>
-      Casa Meyer
+<header class:list={['hdr', `hdr--${variant}`]}>
+  <div class="hdr__side hdr__side--left">
+    <a class="hdr__word hdr__word--primary" href={url(firstChildPath(L.primary))} aria-current={cur(L.primary.key)} aria-label={`${L.primary.label}: ${L.primary.children[0].label}`}>
+      <span class="hdr__dot" aria-hidden="true">●</span><span class="hdr__reveal" aria-hidden="true">{brand.leftPrefix}</span>{brand.left}
     </a>
-    <nav class="header__nav" aria-label="Main">
-      <ul class="header__list" id="navList">
-        {site.nav.map((item) => (
-          <li>
-            <a class:list={['header__link t-label', { 'is-active': isActive(item.href) }]} href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <button class="header__toggle t-label" id="navToggle" aria-expanded="false" aria-controls="navList">
-      <span class="header__toggle-open">Menu</span>
-      <span class="header__toggle-close">Close</span>
-    </button>
+    <a class="hdr__word hdr__word--secondary" href={url(firstChildPath(L.secondary))} aria-current={cur(L.secondary.key)}>
+      <span class="hdr__dot" aria-hidden="true">●</span>{L.secondary.label}
+    </a>
   </div>
+  <div class="hdr__side hdr__side--right">
+    <a class="hdr__word hdr__word--primary" href={url(firstChildPath(R.primary))} aria-current={cur(R.primary.key)}>
+      <span class="hdr__dot" aria-hidden="true">●</span>{brand.right}
+    </a>
+    <a class="hdr__word hdr__word--secondary" href={url(firstChildPath(R.secondary))} aria-current={cur(R.secondary.key)}>
+      <span class="hdr__dot" aria-hidden="true">●</span>{R.secondary.label}
+    </a>
+  </div>
+  <div class="hdr__bar" aria-hidden="true"></div>
 </header>
 
 <style>
-  .header {
-    position: sticky; top: 0; z-index: 50;
-    background: var(--white);
-    border-bottom: 1px solid var(--rule);
-    height: var(--header-h);
-    transition: background 0.3s, border-color 0.3s;
+  /* Each side is a fixed hover region that covers both of its words, so the
+     pointer can travel from the primary word down to the slid-in link. */
+  .hdr__side { position: fixed; top: 0; z-index: 1002; width: 30vw; height: calc(12rem - 6rem * var(--hp)); }
+  .hdr__side--left { left: 0; }
+  .hdr__side--right { right: 0; }
+  .hdr__word {
+    position: fixed; z-index: 1010; white-space: nowrap; color: var(--ink);
+    font-family: var(--font-sans); letter-spacing: -.05em; font-weight: 400;
+    font-size: calc(5rem - 2.5rem * var(--hp));
+    line-height: calc(5.5rem - 1.5rem * var(--hp));
   }
-  .header--overlay {
-    position: fixed; left: 0; right: 0;
-    background: transparent; border-bottom-color: transparent;
-  }
-  .header--overlay.is-solid, .header--overlay.is-open { background: var(--white); border-bottom-color: var(--rule); }
-  .header__inner {
-    height: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
-    display: flex; align-items: center; justify-content: space-between; gap: var(--gutter);
-  }
-  .header__brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; }
-  .header__mark { width: 10px; height: 10px; background: var(--yellow); }
-  .header__brand:hover .header__mark { background: var(--pink); }
+  .hdr__side--left  .hdr__word { left: var(--edge); }
+  .hdr__side--right .hdr__word { right: var(--edge); text-align: right; }
+  .hdr__word--primary   { top: 1rem; }
+  .hdr__word--secondary { top: calc(6rem - 2.1rem * var(--hp)); z-index: 1003; transition: transform var(--t-hover); }
+  .hdr__side--left  .hdr__word--secondary { transform: translateX(-150%); }
+  .hdr__side--right .hdr__word--secondary { transform: translateX(150%); }
+  .hdr__side:hover .hdr__word--secondary,
+  .hdr__side:focus-within .hdr__word--secondary,
+  .hdr__word--secondary[aria-current] { transform: none; }
 
-  .header__list { display: flex; gap: clamp(16px, 2.4vw, 36px); }
-  .header__link { position: relative; padding: 4px 0; }
-  .header__link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--black); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
-  .header__link:hover::after, .header__link.is-active::after { transform: scaleX(1); }
+  .hdr__dot, .hdr__reveal {
+    display: inline-block; vertical-align: top; overflow: hidden; max-width: 0;
+    transition: max-width var(--t-hover), padding var(--t-hover);
+  }
+  .hdr__dot { color: var(--accent); }
+  .hdr__word:hover .hdr__dot, .hdr__word:focus-visible .hdr__dot, .hdr__word[aria-current] .hdr__dot { max-width: 5rem; }
+  .hdr__word:hover .hdr__reveal, .hdr__word:focus-visible .hdr__reveal { max-width: 20rem; padding-right: 1rem; }
 
-  .header__toggle { display: none; }
-  .header__toggle-close { display: none; }
-  .header.is-open .header__toggle-open { display: none; }
-  .header.is-open .header__toggle-close { display: inline; }
+  .hdr__bar {
+    position: fixed; z-index: 1000; top: -2rem; left: -10%; width: 120%; height: 6rem;
+    background: var(--paper); box-shadow: 0 2rem 1rem var(--paper);
+  }
+  .hdr--home .hdr__bar { display: none; }
+  .hdr--detail .hdr__bar { height: 10rem; }
 
   @media (max-width: 767px) {
-    .header__toggle { display: inline-block; }
-    .header__nav { position: fixed; inset: var(--header-h) 0 0 0; background: var(--white); display: none; padding: var(--gutter); }
-    .header.is-open .header__nav { display: block; }
-    .header__list { flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
-    .header__list li { border-bottom: 1px solid var(--rule); }
-    .header__link { display: block; padding: 18px 0; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: none; }
-    .header__link::after { display: none; }
-    .header__link.is-active { color: var(--pink); }
+    .hdr__side { position: static; width: auto; height: auto; }
+    .hdr__word { font-size: 2.5rem; line-height: 1.1; }
+    .hdr__side .hdr__word--secondary { top: 4rem; transition: transform .6s; }
+    html.is-ready .hdr__side .hdr__word--secondary { transform: none; }
+    .hdr__bar, .hdr--home .hdr__bar { display: block; height: 9rem; }
   }
 </style>
-
-<script>
-  function initHeader() {
-    const header = document.getElementById('header');
-    const toggle = document.getElementById('navToggle');
-    if (!header || !toggle) return;
-    toggle.addEventListener('click', () => {
-      const open = header.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', String(open));
-      document.body.style.overflow = open ? 'hidden' : '';
-    });
-    if (header.classList.contains('header--overlay')) {
-      const onScroll = () => header.classList.toggle('is-solid', window.scrollY > window.innerHeight * 0.85);
-      onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }
-  }
-  initHeader();
-  document.addEventListener('astro:after-swap', initHeader);
-</script>

@@ -1,0 +1,11 @@
+---
+import SectionPage from '../../layouts/SectionPage.astro';
+import MapBlock from '../../components/MapBlock.astro';
+import { getCollection } from 'astro:content';
+import { url } from '../../lib/url';
+const items = (await getCollection('works')).filter((it) => it.data.lat != null);
+const points = items.map((it) => ({ id: it.id, title: it.data.title, year: it.data.year, address: it.data.address ?? it.data.location, lat: it.data.lat!, lng: it.data.lng!, href: it.data.detail ? url(`/barragan/works/${it.id}/`) : undefined }));
+---
+<SectionPage section="barragan" child="map" title="Map" description="The works of Luis Barragán on a map." flushFooter={true}>
+  <Fragment slot="after"><MapBlock points={points} variant="all" /></Fragment>
+</SectionPage>

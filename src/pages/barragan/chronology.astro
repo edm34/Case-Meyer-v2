@@ -1,0 +1,24 @@
+---
+import SectionPage from '../../layouts/SectionPage.astro';
+import { getCollection } from 'astro:content';
+import { url } from '../../lib/url';
+const entries = (await getCollection('chronology')).map((c) => c.data);
+---
+<SectionPage section="barragan" child="chronology" title="Chronology" description="A chronology of Luis Barragán's life and work.">
+  <div class="b-intro reveal"><p>The life and work of Luis Barragán, year by year. The house for Barbara Meyer is marked.</p></div>
+  <div class="break"></div>
+  <div class="b-image b-image--centre after-intro reveal"><figure><img src={url('/images/drawing-fachada-poniente.jpg')} alt="Fachada Poniente drawing" width="1500" height="1125" loading="lazy" /><figcaption>Fachada Poniente, 31 October 1978.<span class="credit">Luis Barragán</span></figcaption></figure></div>
+  <div class="break"></div>
+  <div class="rows">
+    {entries.map((e) => (
+      <div class:list={['row reveal', { 'row--casa': e.casaMeyer }]} data-lightbox>
+        {e.image && <figure class:list={['row__thumb', `row__thumb--${e.side ?? 'right'}`]}><img src={url(e.image.src)} alt={e.image.alt} loading="lazy" />{e.image.caption && <figcaption>{e.image.caption}</figcaption>}</figure>}
+        <h3 class="row__title">{e.year}</h3>
+        <div class="row__text" set:html={e.html} />
+      </div>
+    ))}
+  </div>
+</SectionPage>
+<style>
+  .row--casa .row__title::before { content: "● "; color: var(--accent); }
+</style>

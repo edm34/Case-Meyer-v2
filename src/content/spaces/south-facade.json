@@ -1,0 +1,28 @@
+{
+  "title": "South Facade",
+  "year": "1978",
+  "category": "Elevation",
+  "notes": "Three stepped volumes and a chimney wall",
+  "location": "Garden side",
+  "lat": 19.3995,
+  "lng": -99.252,
+  "address": "Bosques de las Lomas, Mexico City",
+  "order": 3,
+  "thumb": "/images/drawing-fachada-sur.jpg",
+  "detail": {
+    "cover": {
+      "src": "/images/drawing-fachada-sur.jpg",
+      "alt": "Fachada Sur drawing",
+      "caption": "Fachada Sur.",
+      "credit": "Luis Barragán, 31 October 1978"
+    },
+    "intro": "The south elevation is drawn as three volumes stepping up from left to right, closed with a tall chimney wall. The windows are few and square, cut deep into the mass. A low terrace wall runs across the front.",
+    "blocks": [
+      {
+        "type": "text",
+        "placement": "centre",
+        "html": "<p>[Photographs of the south side of the house still to come.]</p>"
+      }
+    ]
+  }
+}

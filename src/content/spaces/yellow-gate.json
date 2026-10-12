@@ -1,0 +1,40 @@
+{
+  "title": "The Yellow Gate",
+  "year": "1978",
+  "category": "Street facade",
+  "notes": "The sliding gate and the long white wall",
+  "location": "Street",
+  "lat": 19.3995,
+  "lng": -99.252,
+  "address": "Bosques de las Lomas, Mexico City",
+  "order": 1,
+  "thumb": "/images/facade-street.jpg",
+  "detail": {
+    "cover": {
+      "src": "/images/facade-street.jpg",
+      "alt": "The yellow gate in the white street wall",
+      "caption": "The street facade.",
+      "credit": "Family collection"
+    },
+    "intro": "From the street the house is a single low wall with two openings: a narrow white door for people and the wide yellow gate for cars. The gate slides rather than swings, so the wall is never broken. The yellow is the only colour on the street.",
+    "blocks": [
+      {
+        "type": "text",
+        "placement": "centre",
+        "html": "<p>A thin concrete lintel runs the full length of the wall and carries a hedge of vines, bougainvillea and trumpet flowers that has grown over it for decades. Barragán thought of the garden as a room without a roof; here the planting is left to cover the architecture until, from outside, the house reads as a hedge with a yellow door in it.</p>"
+      },
+      {
+        "type": "gallery",
+        "size": "small",
+        "images": [
+          {
+            "src": "/images/watercolor-facade.jpg",
+            "alt": "Watercolor of the street facade",
+            "caption": "Watercolor study of the street facade.",
+            "credit": "Artist to be confirmed"
+          }
+        ]
+      }
+    ]
+  }
+}

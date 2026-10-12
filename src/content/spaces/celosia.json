@@ -1,0 +1,28 @@
+{
+  "title": "The Pink Lattice",
+  "year": "1978",
+  "category": "Screen",
+  "notes": "A celosía painted bougainvillea pink with one green square",
+  "location": "Garden side",
+  "lat": 19.3995,
+  "lng": -99.252,
+  "address": "Bosques de las Lomas, Mexico City",
+  "order": 2,
+  "thumb": "/images/drawing-celosia.jpg",
+  "detail": {
+    "cover": {
+      "src": "/images/drawing-celosia.jpg",
+      "alt": "Drawing of the pink lattice with the green square",
+      "caption": "Study for the lattice.",
+      "credit": "Luis Barragán, 1978"
+    },
+    "intro": "A celosía is a lattice: a screen that lets light and air through while keeping the inside private. At Casa Meyer the lattice is painted a deep bougainvillea pink, and one of its openings is filled with a single square of bright green.",
+    "blocks": [
+      {
+        "type": "text",
+        "placement": "centre",
+        "html": "<p>Barragán's study gives the screen's measurements in centimetres, 299 wide by 277 high, with a door set into the right third. The green square sits beside the door, where a hand reaches for it. The lattice is the house's signature and the starting point for the design of this site. [Photographs of the lattice in place still to come.]</p>"
+      }
+    ]
+  }
+}

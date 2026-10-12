@@ -1,0 +1,60 @@
+[
+  {
+    "id": "casa",
+    "section": "casa",
+    "heading": "The last house Luis Barragán designed",
+    "html": "<p>Casa Meyer was drawn in October 1978 for Barbara Meyer, on a hillside street in Bosques de las Lomas, Mexico City. From the street it is a long white wall under a hedge of vines, with one yellow gate. It remains a private home.</p>",
+    "pill": {
+      "label": "The house",
+      "href": "/casa/house/"
+    },
+    "photo": {
+      "src": "/images/facade-street.jpg",
+      "alt": "The street facade of Casa Meyer with its yellow gate",
+      "credit": "Family collection"
+    }
+  },
+  {
+    "id": "meyer",
+    "section": "meyer",
+    "heading": "A gift between friends",
+    "html": "<p>Barbara Meyer and Luis Barragán were friends for nearly twenty-five years. At seventy-six, with his office all but closed, he designed one last house for her and dedicated the drawings in his own hand: <em>para Baby Meyer de Garate, con todo cariño</em>.</p>",
+    "pill": {
+      "label": "The friendship",
+      "href": "/meyer/friendship/"
+    },
+    "photo": {
+      "src": "/images/barbara-and-luis.jpg",
+      "alt": "Barbara Meyer and Luis Barragán"
+    }
+  },
+  {
+    "id": "barragan",
+    "section": "barragan",
+    "heading": "Luis Barragán, 1902–1988",
+    "html": "<p>The most prominent figure in modern Mexican architecture built little, almost all of it in and around Mexico City: houses, gardens, a chapel, stables, towers. He spoke of serenity, silence and solitude as the qualities a house should offer.</p>",
+    "pill": {
+      "label": "All works",
+      "href": "/barragan/works/"
+    },
+    "photo": {
+      "src": "/images/drawing-fachada-sur.jpg",
+      "alt": "Fachada Sur drawing"
+    },
+    "carousel": true
+  },
+  {
+    "id": "visit",
+    "section": "visit",
+    "heading": "Visit the house",
+    "html": "<p>Small groups are received on selected days, by appointment. A visit follows the sequence of walls, light and colour as Barragán laid it out, from the yellow gate through the house to the garden.</p>",
+    "pill": {
+      "label": "Request a visit",
+      "href": "/visit/visits/"
+    },
+    "photo": {
+      "src": "/images/drawing-celosia.jpg",
+      "alt": "Drawing of the pink lattice"
+    }
+  }
+]

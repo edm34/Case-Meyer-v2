@@ -1,0 +1,15 @@
+{
+  "title": "Imprint",
+  "description": "Imprint.",
+  "blocks": [
+    {
+      "type": "large",
+      "html": "<p>Casa Meyer<br>Bosques de las Lomas<br>Mexico City<br><a href=\"mailto:visit@example.com\">visit@example.com</a></p>"
+    },
+    {
+      "type": "text",
+      "placement": "centre",
+      "html": "<h2>Responsible for content</h2><p>[Name of the owner or operator to be confirmed.]</p><h2>Images</h2><p>Drawings by Luis Barragán reproduced from the originals held by the family. Photographs from the family collection unless otherwise credited.</p><h2>Design</h2><p>The site follows a split-wordmark editorial layout and uses the colours of the house: the yellow of the gate, the pink of the lattice, the white of the walls and the one green square. Set in Jost and Source Serif 4.</p>"
+    }
+  ]
+}

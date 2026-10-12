@@ -1,0 +1,15 @@
+{
+  "title": "Privacy",
+  "description": "Privacy notice.",
+  "blocks": [
+    {
+      "type": "large",
+      "html": "<p>This site collects no personal data of its own.</p>"
+    },
+    {
+      "type": "text",
+      "placement": "centre",
+      "html": "<h2>Visit requests</h2><p>When you request a visit, the details you enter are sent to us by email and used only to arrange and confirm your visit.</p><h2>Maps and fonts</h2><p>Map tiles are loaded from CARTO and OpenStreetMap, and typefaces from Google Fonts. Your browser sends those services your IP address when it loads them.</p><h2>Cookies</h2><p>None. The site remembers in your browser session only that the loading screen has already been shown.</p>"
+    }
+  ]
+}

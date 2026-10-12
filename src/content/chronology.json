@@ -1,17 +1,122 @@
 [
-  { "id": "1902", "year": "1902", "title": "Born in Guadalajara", "text": "Luis Ramiro Barragán Morfín is born on 9 March in Guadalajara, Jalisco, into a family of landowners. Childhood summers at the family ranch near Mazamitla leave a lasting memory of adobe walls, water channels and village colour." },
-  { "id": "1923", "year": "1923", "title": "Engineering degree", "text": "Graduates as a civil engineer from the Escuela Libre de Ingenieros in Guadalajara. He never takes a formal degree in architecture." },
-  { "id": "1924", "year": "1924–25", "title": "First journey to Europe", "text": "Travels through France and Spain. The gardens of Ferdinand Bac and the Alhambra in Granada shape his understanding of the garden as an enclosed, private world." },
-  { "id": "1931", "year": "1931–32", "title": "Second journey", "text": "Visits New York and Paris, attends lectures by Le Corbusier and meets Ferdinand Bac in person." },
-  { "id": "1936", "year": "1936", "title": "Moves to Mexico City", "text": "Settles in the capital and works for several years as a developer and architect of functionalist apartment buildings." },
-  { "id": "1945", "year": "1945–50", "title": "Jardines del Pedregal", "text": "Plans the residential subdivision on the lava fields south of the city, with gardens and show houses that establish his mature language of walls, water and landscape." },
-  { "id": "1948", "year": "1948", "title": "Casa Barragán", "text": "Completes his own house and studio in Tacubaya, which he will continue to alter for the rest of his life." },
-  { "id": "1955", "year": "1955", "title": "Capuchinas chapel", "text": "Completes the chapel and convent for the Capuchinas Sacramentarias in Tlalpan, a study in coloured light." },
-  { "id": "1957", "year": "1957", "title": "Torres de Satélite", "text": "With Mathias Goeritz, builds the five coloured towers at the entrance to Ciudad Satélite." },
-  { "id": "1968", "year": "1968", "title": "Cuadra San Cristóbal", "text": "Completes the house, stables and pools for the Egerström family at Los Clubes, with Andrés Casillas." },
-  { "id": "1977", "year": "1977", "title": "Casa Gilardi", "text": "Completes the house in San Miguel Chapultepec, with its yellow corridor and indoor pool." },
-  { "id": "1978", "year": "1978", "title": "Casa Meyer", "text": "On 31 October he signs the elevation drawings for a house in Bosques de las Lomas for his friend Barbara Meyer, inscribed \"para Baby Meyer de Garate, con todo cariño\". It is his last residential project.", "casaMeyer": true },
-  { "id": "1980", "year": "1980", "title": "Pritzker Architecture Prize", "text": "Receives the Pritzker Prize. In his acceptance speech he speaks of serenity, silence, solitude and the garden." },
-  { "id": "1988", "year": "1988", "title": "Death in Mexico City", "text": "Dies on 22 November at his house in Tacubaya." },
-  { "id": "2004", "year": "2004", "title": "World Heritage", "text": "Casa Luis Barragán is inscribed on the UNESCO World Heritage List." }
+  {
+    "id": "0",
+    "year": "1902",
+    "html": "<p>Luis Ramiro Barragán Morfín is born on 9 March in Guadalajara, Jalisco, into a family of landowners. Childhood summers at the family ranch near Mazamitla leave a lasting memory of adobe walls, water channels and village colour.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "1",
+    "year": "1923",
+    "html": "<p>Graduates as a civil engineer from the Escuela Libre de Ingenieros in Guadalajara. He never takes a formal degree in architecture.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "2",
+    "year": "1924–25",
+    "html": "<p>Travels through France and Spain. The gardens of Ferdinand Bac and the Alhambra in Granada shape his understanding of the garden as an enclosed, private world.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "3",
+    "year": "1927–36",
+    "html": "<p>Builds his first houses and gardens in Guadalajara, among them Casa González Luna and Casa Cristo, and the Parque de la Revolución.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "4",
+    "year": "1931–32",
+    "html": "<p>Second journey: New York, then Paris, where he attends lectures by Le Corbusier and meets Ferdinand Bac in person.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "5",
+    "year": "1936",
+    "html": "<p>Settles in Mexico City and works for several years as a developer and architect of functionalist apartment buildings.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "6",
+    "year": "1940",
+    "html": "<p>Withdraws from commercial practice. Buys land in Tacubaya and begins a series of experimental private gardens.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "7",
+    "year": "1945–50",
+    "html": "<p>Plans Jardines del Pedregal on the lava fields south of the city, with gardens and show houses that establish his mature language of walls, water and landscape.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "8",
+    "year": "1948",
+    "html": "<p>Completes his own house and studio in Tacubaya, which he continues to alter for the rest of his life.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "9",
+    "year": "1955",
+    "html": "<p>Completes the chapel and convent for the Capuchinas Sacramentarias in Tlalpan, and Casa Gálvez in San Ángel.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "10",
+    "year": "1957",
+    "html": "<p>With Mathias Goeritz, builds the five coloured towers of Ciudad Satélite.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "11",
+    "year": "1968",
+    "html": "<p>Completes Cuadra San Cristóbal for the Egerström family at Los Clubes, with Andrés Casillas.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "12",
+    "year": "1976",
+    "html": "<p>A retrospective at the Museum of Modern Art in New York, with a monograph by Emilio Ambasz, brings his work to an international audience.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "13",
+    "year": "1977",
+    "html": "<p>Completes Casa Gilardi in San Miguel Chapultepec, with its yellow corridor and indoor pool.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "14",
+    "year": "1978",
+    "html": "<p>On 31 October he signs the elevation drawings for a house in Bosques de las Lomas for his friend Barbara Meyer, inscribed <em>para Baby Meyer de Garate, con todo cariño</em>. It is his last residential project.</p>",
+    "image": {
+      "src": "/images/drawing-fachada-sur.jpg",
+      "alt": "Fachada Sur drawing",
+      "caption": "Fachada Sur, 31 October 1978."
+    },
+    "side": "right",
+    "casaMeyer": true
+  },
+  {
+    "id": "15",
+    "year": "1980",
+    "html": "<p>Receives the Pritzker Architecture Prize. In his acceptance speech he speaks of serenity, silence, solitude and the garden.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "16",
+    "year": "1984",
+    "html": "<p>The Faro del Comercio in Monterrey, his last built work.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "17",
+    "year": "1988",
+    "html": "<p>Dies on 22 November at his house in Tacubaya.</p>",
+    "casaMeyer": false
+  },
+  {
+    "id": "18",
+    "year": "2004",
+    "html": "<p>Casa Luis Barragán is inscribed on the UNESCO World Heritage List.</p>",
+    "casaMeyer": false
+  }
 ]

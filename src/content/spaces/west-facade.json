@@ -1,0 +1,28 @@
+{
+  "title": "West Facade",
+  "year": "1978",
+  "category": "Elevation",
+  "notes": "A tall tower volume and a flight of steps",
+  "location": "Garden side",
+  "lat": 19.3995,
+  "lng": -99.252,
+  "address": "Bosques de las Lomas, Mexico City",
+  "order": 4,
+  "thumb": "/images/drawing-fachada-poniente.jpg",
+  "detail": {
+    "cover": {
+      "src": "/images/drawing-fachada-poniente.jpg",
+      "alt": "Fachada Poniente drawing",
+      "caption": "Fachada Poniente, scale 1:50.",
+      "credit": "Luis Barragán, 31 October 1978"
+    },
+    "intro": "The west elevation, drawn at 1:50, stacks a tall shaded tower against a lower block, with a flight of steps descending along its base. A thin outline behind marks the height of the wall beyond.",
+    "blocks": [
+      {
+        "type": "text",
+        "placement": "centre",
+        "html": "<p>[Photographs of the west side of the house and garden still to come.]</p>"
+      }
+    ]
+  }
+}

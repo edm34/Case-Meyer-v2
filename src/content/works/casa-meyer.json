@@ -1,0 +1,23 @@
+{
+  "title": "Casa Meyer",
+  "year": "1978",
+  "category": "House",
+  "notes": "For Barbara Meyer; his last residential project",
+  "location": "Mexico City",
+  "lat": 19.3995,
+  "lng": -99.252,
+  "order": 19,
+  "address": "Bosques de las Lomas, Mexico City",
+  "thumb": "/images/facade-street.jpg",
+  "detail": {
+    "intro": "The last house Barragán designed, drawn in October 1978 for his friend Barbara Meyer in Bosques de las Lomas. The south and west elevations are dedicated in his hand. A private home, visited by appointment.",
+    "blocks": [],
+    "cover": {
+      "src": "/images/facade-street.jpg",
+      "alt": "The street facade of Casa Meyer",
+      "caption": "The street facade.",
+      "credit": "Family collection"
+    },
+    "meta": "<p><a href=\"/casa/house/\">The house</a><br><a href=\"/casa/drawings/\">The drawings</a><br><a href=\"/visit/visits/\">Visit</a></p>"
+  }
+}

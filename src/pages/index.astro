@@ -1,45 +1,102 @@
 ---
+/**
+ * Home: fixed full-window photographs cross-fade behind four sections of
+ * heading, intro and pill. Section 3 carries the feature carousel.
+ */
 import Base from '../layouts/Base.astro';
-import Slideshow from '../components/Slideshow.astro';
+import Carousel from '../components/Carousel.astro';
 import { getCollection } from 'astro:content';
 import { url } from '../lib/url';
 
-const slides = (await getCollection('slides')).map((s) => s.data);
-const spaces = (await getCollection('spaces')).sort((a, b) => a.data.order - b.data.order);
+const sectionsData = (await getCollection('home')).map((s) => s.data);
+const spaces = (await getCollection('spaces')).filter((s) => s.data.detail?.cover).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const feature = spaces.map((s) => ({ src: s.data.detail!.cover!.src, alt: s.data.detail!.cover!.alt, caption: `${s.data.title}, ${s.data.year}`, href: `/casa/spaces/${s.id}/` }));
 ---
-<Base>
-  <Slideshow slides={slides} />
+<Base variant="home" openOffset={false}>
+  <h1 class="sr-only">Casa Meyer</h1>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="row row--wide" style="border-top:0">
-        <p class="t-label t-grey reveal">Casa Meyer</p>
-        <div class="reveal">
-          <h1 class="t-lg">The last house designed by Luis Barragán, built in 1978 for his friend Barbara Meyer in Bosques de las Lomas, Mexico City.</h1>
-          <p class="t-md t-grey" style="margin-top:1.2em">It remains a private home. It can be visited by appointment.</p>
-          <p style="margin-top:2em"><a class="btn btn--yellow" href={url('/visit/')}>Request a visit</a></p>
-        </div>
+  <div class="photos" id="photos" aria-hidden="true">
+    {sectionsData.map((s, i) => s.photo && (
+      <div class="photos__item" data-photo={s.id}>
+        <img src={url(s.photo.src)} alt="" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
+        {s.photo.credit && <span class="photos__credit">{s.photo.credit}</span>}
       </div>
-    </div>
-  </section>
+    ))}
+  </div>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="row">
-        <p class="t-label t-grey">Spaces</p>
-        <ul class="index">
-          {spaces.map((s, i) => (
-            <li>
-              <a class="index__item" href={url(`/spaces/${s.id}/`)}>
-                <span class="index__num">{String(i + 1).padStart(2, '0')}</span>
-                <span class="index__title">{s.data.title}</span>
-                <span class="index__meta">{s.data.subtitle}</span>
-                <img class="index__thumb" src={url(s.data.cover.src)} alt="" loading="lazy" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
+  {sectionsData.map((s, i) => (
+    <section class:list={['home-section flow', `home-section--${i + 1}`]} data-section={s.id} id={s.id}>
+      <h2 class="home-section__heading reveal">{s.heading}</h2>
+      <div class="home-section__intro reveal" set:html={s.html} />
+      {s.carousel && (
+        <>
+          <div class="home-section__feature">
+            <Carousel slides={feature} size="feature" />
+            <p class="home-section__feature-pill"><a class="pill" href={url('/casa/spaces/')}>All spaces</a></p>
+          </div>
+        </>
+      )}
+      <p class="pill-wrap reveal"><a class="pill" href={url(s.pill.href)}>{s.pill.label}</a></p>
+    </section>
+  ))}
 </Base>
+
+<style>
+  .photos { position: fixed; inset: 0; z-index: -1; opacity: 0; transition: opacity .5s; }
+  .photos.is-ready { opacity: 1; }
+  .photos__item { position: absolute; inset: 0; opacity: 0; }
+  .photos__item img { width: 100vw; height: 100vh; object-fit: cover; }
+  .photos__credit { position: absolute; right: 1rem; bottom: 1rem; width: 33rem; transform-origin: right bottom; transform: rotate(-90deg) translateX(0); font: 400 .7rem/1.1 var(--font-sans); text-align: right; text-shadow: 0 0 2rem #ddd; color: var(--black); }
+
+  .home-section { padding: 25vh 0 50vh; }
+  .home-section--1 { margin-top: 40vh; padding-top: 40vh; }
+  .home-section--3 { padding: 25vh 2rem 0; margin-bottom: 50vh; }
+  .home-section--4 { padding-top: 5vh; }
+  .home-section__heading { width: var(--col-5); font: 400 2.5rem/.9 var(--font-sans); letter-spacing: -.02em; text-align: center; margin-bottom: 3rem; color: var(--black); }
+  .home-section__intro { width: var(--col-8); font: 400 2rem/1.15 var(--font-serif); color: var(--ink); }
+  .home-section__intro :global(p) { margin: 0 0 4rem; }
+  .home-section__feature { width: 100vw; margin: 0 -2rem; position: relative; }
+  .home-section__feature-pill { position: relative; text-align: center; margin: -6rem 0 0; z-index: 2; }
+  .home-section--3 .pill-wrap { display: none; }
+
+  @media (max-width: 767px) {
+    .photos { top: 9rem; }
+    .photos__item img { height: calc(100vh - 10rem); object-position: 4% top; position: absolute; bottom: 0; }
+    .home-section__intro { font-size: 1.7rem; padding: 1rem; }
+    .home-section--3 { padding-left: 0; padding-right: 0; }
+    .home-section__feature { margin: 0; }
+    .photos__credit { display: none; }
+  }
+</style>
+
+<script>
+  // Photograph opacity as a function of where the top of its section sits in the window.
+  const layer = document.getElementById('photos')!;
+  const items = new Map<string, HTMLElement>();
+  layer.querySelectorAll<HTMLElement>('[data-photo]').forEach((el) => items.set(el.dataset.photo!, el));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = (t: number) => 1 - (1 - t) ** 2;
+  function update() {
+    const H = innerHeight;
+    sections.forEach((sec) => {
+      const el = items.get(sec.dataset.section!);
+      if (!el) return;
+      const y = sec.getBoundingClientRect().top;
+      const p = (H - y) / (0.8 * H);
+      let o = 0;
+      if (p <= 0 || p >= 1) o = 0;
+      else if (p < 0.25) o = ease(p / 0.25);
+      else if (p <= 0.75) o = 1;
+      else o = (1 - (p - 0.75) / 0.25) ** 2;
+      if (reduce) o = o > 0.5 ? 1 : 0;
+      el.style.opacity = String(o);
+    });
+  }
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+  const first = layer.querySelector('img')!;
+  const ready = () => layer.classList.add('is-ready');
+  if (first.complete) ready(); else { first.addEventListener('load', ready, { once: true }); first.addEventListener('error', ready, { once: true }); }
+</script>

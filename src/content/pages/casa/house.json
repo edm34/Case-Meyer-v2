@@ -1,0 +1,95 @@
+{
+  "title": "The House",
+  "description": "Casa Meyer, the last house designed by Luis Barragán, 1978.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Casa Meyer is the last house Luis Barragán designed. He drew it in October 1978, at seventy-six, for his friend Barbara Meyer, on a hillside street in Bosques de las Lomas on the western edge of Mexico City. It remains a private home.</p>"
+    },
+    {
+      "type": "image",
+      "placement": "centre",
+      "image": {
+        "src": "/images/facade-street.jpg",
+        "alt": "The street facade of Casa Meyer: a long white wall with a yellow sliding gate under a hedge of vines and bougainvillea",
+        "width": 2000,
+        "height": 1500,
+        "caption": "The street facade, with the yellow gate closed.",
+        "credit": "Family collection"
+      }
+    },
+    {
+      "type": "text",
+      "placement": "left",
+      "html": "<p>From the street the house is a single low wall. A thin concrete lintel runs its full length and carries a hedge of vines, bougainvillea and trumpet flowers that has grown over the wall for decades. Beneath the lintel there are two openings: a narrow white door for people and the wide yellow gate for cars. The gate slides rather than swings, so the wall is never broken.</p><p>The yellow is the warm chrome yellow Barragán used in the corridor of Casa Gilardi two years earlier. It is the only colour on the street.</p>"
+    },
+    {
+      "type": "image",
+      "placement": "right",
+      "image": {
+        "src": "/images/watercolor-facade.jpg",
+        "alt": "Watercolor of the street facade with the yellow gate",
+        "width": 1200,
+        "height": 896,
+        "caption": "Watercolor study of the street facade.",
+        "credit": "Artist to be confirmed"
+      }
+    },
+    {
+      "type": "break"
+    },
+    {
+      "type": "image",
+      "placement": "left",
+      "image": {
+        "src": "/images/drawing-fachada-sur.jpg",
+        "alt": "Pencil elevation drawing titled Fachada Sur, dated 31 October 1978, dedicated to Baby Meyer de Garate",
+        "width": 1500,
+        "height": 1125,
+        "caption": "Fachada Sur, 31 October 1978.",
+        "credit": "Luis Barragán"
+      }
+    },
+    {
+      "type": "text",
+      "placement": "right",
+      "html": "<p>Two elevation drawings survive in Barragán's own hand, both dated 31 October 1978 and both dedicated across the bottom: <em>para Baby Meyer de Garate, con todo cariño</em>. They show a house of stacked, nearly windowless volumes, a tall chimney wall, and a flight of steps running along the garden side. The openings are filled solid black; the sunlit and shaded planes are shaded in pencil.</p><p>[The house today: who lives there, what has been kept, what has changed, and why it is being opened to visitors. To be written with the family.]</p>"
+    },
+    {
+      "type": "break"
+    },
+    {
+      "type": "gallery",
+      "size": "large",
+      "images": [
+        {
+          "src": "/images/drawing-fachada-sur.jpg",
+          "alt": "Pencil elevation drawing titled Fachada Sur, dated 31 October 1978, dedicated to Baby Meyer de Garate",
+          "width": 1500,
+          "height": 1125,
+          "caption": "Fachada Sur",
+          "credit": "Luis Barragán, 31 October 1978"
+        },
+        {
+          "src": "/images/drawing-fachada-poniente.jpg",
+          "alt": "Pencil elevation drawing titled Fachada Poniente at a scale of 1 to 50, dated 31 October 1978",
+          "width": 1500,
+          "height": 1125,
+          "caption": "Fachada Poniente",
+          "credit": "Luis Barragán, 31 October 1978"
+        },
+        {
+          "src": "/images/drawing-celosia.jpg",
+          "alt": "Dimensioned drawing of the pink lattice screen with a single green square, on pink paper",
+          "width": 2000,
+          "height": 1500,
+          "caption": "Celosía",
+          "credit": "Luis Barragán, 1978"
+        }
+      ]
+    },
+    {
+      "type": "break"
+    }
+  ]
+}

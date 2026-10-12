@@ -1,0 +1,26 @@
+{
+  "title": "Biography",
+  "description": "Luis Barragán, 1902–1988.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Luis Barragán (1902–1988) is the most prominent figure in modern Mexican architecture. He built little, almost all of it in and around Mexico City, and spoke of serenity, silence and solitude as the qualities a house should offer.</p>"
+    },
+    {
+      "type": "text",
+      "placement": "centre",
+      "html": "<p>Luis Ramiro Barragán Morfín was born in Guadalajara on 9 March 1902 into a family of landowners. Childhood summers at the family ranch near Mazamitla left him with a lasting memory of adobe walls, water channels and village colour. He trained as a civil engineer at the Escuela Libre de Ingenieros in Guadalajara and never took a formal degree in architecture.</p><p>He taught himself by travelling. In France and Spain in 1924 and 1925 he found the gardens of Ferdinand Bac and the Alhambra, and understood the garden as an enclosed, private world. On a second journey in 1931 he met Bac in person and attended lectures by Le Corbusier. He settled in Mexico City in 1936 and spent a decade as a developer and architect of functionalist apartment buildings before withdrawing from commercial practice to work on his own terms.</p><p>What followed was a small number of houses, gardens, chapels and stables, built from thick walls, still water and colour: the subdivision and show houses at Jardines del Pedregal, his own house and studio in Tacubaya, the chapel for the Capuchinas in Tlalpan, the Torres de Satélite with Mathias Goeritz, the stables and pools of Cuadra San Cristóbal, and Casa Gilardi with its yellow corridor. He received the Pritzker Prize in 1980 and died in his own house in 1988.</p><p>Casa Meyer, drawn in October 1978, is the last house he designed.</p>"
+    },
+    {
+      "type": "break"
+    },
+    {
+      "type": "large",
+      "html": "<p>“Any work of architecture which does not express serenity is a mistake.”</p>"
+    },
+    {
+      "type": "small",
+      "html": "<p>Pritzker Prize acceptance speech, Dumbarton Oaks, 3 June 1980.</p>"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+---
+/** One thin arrow glyph: down on the home page (scrolls to content), up elsewhere (links home). */
+import { url } from '../lib/url';
+const { direction = 'up' } = Astro.props as { direction?: 'up' | 'down' };
+---
+{direction === 'down' ? (
+  <button class="arrow arrow--down" id="arrowDown" aria-label="Scroll to the first section">
+    <svg viewBox="0 0 50 50" aria-hidden="true"><path d="M25 2v46M8 31l17 17 17-17" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
+) : (
+  <a class="arrow arrow--up" href={url('/')} aria-label="Home">
+    <svg viewBox="0 0 50 50" aria-hidden="true"><path d="M25 48V2M8 19L25 2l17 17" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+  </a>
+)}
+<style>
+  .arrow { position: fixed; left: 50%; transform: translateX(-50%); z-index: 10000; height: 5.3rem; width: 5.3rem; color: var(--black); display: block; }
+  .arrow:hover { opacity: .5; }
+  .arrow svg { width: 100%; height: 100%; }
+  .arrow--down { bottom: calc(1rem - 6rem * var(--hp)); }
+  .arrow--up { position: absolute; top: calc(1rem - 11rem * var(--hp)); }
+  @media (max-width: 767px) { .arrow { height: 3rem; width: 3rem; } }
+</style>
+<script>
+  document.getElementById('arrowDown')?.addEventListener('click', () => {
+    const t = document.querySelector<HTMLElement>('.home-section');
+    if (t) window.scrollTo({ top: t.offsetTop - innerHeight * 0.1, behavior: 'smooth' });
+  });
+</script>

@@ -1,0 +1,12 @@
+---
+import SectionPage from '../../../layouts/SectionPage.astro';
+import IndexTable from '../../../components/IndexTable.astro';
+import { getCollection } from 'astro:content';
+const items = (await getCollection('spaces')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const rows = items.map((it) => ({ id: it.id, title: it.data.title, year: it.data.year, category: it.data.category, notes: it.data.notes, location: it.data.location, thumb: it.data.thumb, href: it.data.detail ? `/casa/spaces/${it.id}/` : undefined }));
+---
+<SectionPage section="casa" child="spaces" title="Spaces" description="The walls, rooms and garden of Casa Meyer." flushFooter={true}>
+  <div class="b-intro reveal"><p>The house, wall by wall. Rows with an arrow open a page; the others are waiting for photographs.</p></div>
+  <div class="break"></div>
+  <IndexTable rows={rows} filter={true} id="spaces" />
+</SectionPage>

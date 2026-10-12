@@ -1,0 +1,23 @@
+---
+/** Legal pages: no sub-navigation, no opening offset, expanded header visible on load. */
+import Base from '../layouts/Base.astro';
+import Blocks from '../components/Blocks.astro';
+import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (p) => p.id.startsWith('legal/'));
+  return pages.map((p) => ({ params: { legal: p.id.split('/')[1] }, props: { entry: p } }));
+}
+const { entry } = Astro.props;
+---
+<Base title={entry.data.title} description={entry.data.description} variant="legal" openOffset={false}>
+  <div class="flow content content--legal">
+    <h1 class="legal-title">{entry.data.title}</h1>
+    <div class="break"></div>
+    <Blocks blocks={entry.data.blocks} />
+  </div>
+</Base>
+<style>
+  .legal-title { width: var(--col-7); font: 400 2rem/1.1 var(--font-sans); margin-bottom: 2rem; }
+  :global(.b-text h2) { font: 400 2rem/1.1 var(--font-sans) !important; margin: 2rem 0 1rem !important; }
+  @media (max-width: 767px) { .legal-title { width: 100%; padding: 0 1rem; } }
+</style>

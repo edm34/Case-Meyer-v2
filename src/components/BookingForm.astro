@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import { brand } from '../lib/site';
+const tours = (await getCollection('tours')).map((t) => t.data);
+---
+<form class="form reveal" id="bookingForm" method="post" action={brand.bookingEndpoint || undefined} data-email={brand.email} data-endpoint={brand.bookingEndpoint}>
+  <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required /></div>
+  <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required /></div>
+  <div class="field"><label for="f-date">Preferred date</label><input id="f-date" name="date" type="date" required /></div>
+  <div class="field"><label for="f-guests">Guests</label>
+    <select id="f-guests" name="guests" required><option value="" disabled selected>Select</option>{[1,2,3,4,5,6].map((n) => <option value={n}>{n}</option>)}</select>
+  </div>
+  <div class="field"><label for="f-tour">Visit</label>
+    <select id="f-tour" name="tour" required><option value="" disabled selected>Select</option>{tours.map((t) => <option value={t.id}>{t.name}</option>)}</select>
+  </div>
+  <div class="field"><label for="f-lang">Language</label>
+    <select id="f-lang" name="language"><option value="en">English</option><option value="es">Español</option></select>
+  </div>
+  <div class="field span-2"><label for="f-msg">Message</label><textarea id="f-msg" name="message"></textarea></div>
+  <div class="span-2"><button class="pill" type="submit">Send request</button></div>
+  <p class="note span-2" id="bookingNote">We reply by email, usually within two days.</p>
+</form>
+<script>
+  (function () {
+    const form = document.getElementById('bookingForm') as HTMLFormElement | null;
+    if (!form || form.dataset.endpoint) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const lines = Array.from(new FormData(form).entries()).map(([k, v]) => `${k}: ${v}`);
+      location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Visit request — Casa Meyer')}&body=${encodeURIComponent(lines.join('\n'))}`;
+      const n = document.getElementById('bookingNote');
+      if (n) n.textContent = `Your email app should open with the request. If it does not, write to ${form.dataset.email}.`;
+    });
+  })();
+</script>

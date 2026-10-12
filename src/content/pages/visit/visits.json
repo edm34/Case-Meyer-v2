@@ -1,0 +1,44 @@
+{
+  "title": "Visits",
+  "description": "Private visits to Casa Meyer by appointment.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Casa Meyer is a private home. Small groups are received on selected days, by appointment. Tell us when you would like to come and we will reply with available dates.</p>"
+    },
+    {
+      "type": "text",
+      "placement": "centre",
+      "html": "<p>Visits are led in English or Spanish and follow the sequence of walls, light and colour as Barragán laid it out, from the yellow gate through the house to the garden. Photography for personal use is welcome unless a visit says otherwise. [Days, hours, group sizes and prices to be confirmed.]</p>"
+    },
+    {
+      "type": "row",
+      "title": "House Tour",
+      "html": "<p><em>60 minutes · price to be confirmed</em></p><p>A guided walk through the house and garden with the story of the friendship and the drawings.</p>"
+    },
+    {
+      "type": "row",
+      "title": "Architecture Tour",
+      "html": "<p><em>90 minutes · price to be confirmed</em></p><p>An extended visit with the original drawings, looking closely at proportion, material and the handling of light.</p>"
+    },
+    {
+      "type": "row",
+      "title": "Private Visit",
+      "html": "<p><em>By arrangement · price to be confirmed</em></p><p>An exclusive visit for a small group, arranged around your schedule.</p>"
+    },
+    {
+      "type": "break"
+    },
+    {
+      "type": "subheading",
+      "text": "Request a visit"
+    },
+    {
+      "type": "break"
+    },
+    {
+      "type": "form",
+      "form": "booking"
+    }
+  ]
+}

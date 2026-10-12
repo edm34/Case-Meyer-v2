@@ -2,90 +2,47 @@
 /**
  * Loading screen built from the house's signature: the pink celosía with its
  * single green square. The lattice draws itself bar by bar, the green square
- * lights, then a yellow panel slides across like the gate and the page is
- * revealed. Shown once per browser session.
+ * lights, then a yellow panel slides across like the gate. Once per session.
  */
-const cols = 12;
-const rows = 11;
-const cell = 24;      // cell pitch
-const bar = 7;        // bar thickness
-const w = cols * cell + bar;
-const h = rows * cell + bar;
-// green square: a cell near the lower right, as in the drawing
-const gCol = 7;
-const gRow = 7;
+const cols = 12, rows = 11, cell = 24, bar = 7;
+const w = cols * cell + bar, h = rows * cell + bar;
+const gCol = 7, gRow = 7;
 ---
 <div class="preloader" id="preloader" aria-hidden="true">
   <div class="preloader__panel">
-    <svg class="celosia" viewBox={`0 0 ${w} ${h}`} width={w} height={h} role="img" aria-label="Pink lattice">
-      <g class="celosia__bars">
-        {Array.from({ length: rows + 1 }).map((_, r) => (
-          <rect class="bar bar--h" x="0" y={r * cell} width={w} height={bar} style={`--i:${r}`} />
-        ))}
-        {Array.from({ length: cols + 1 }).map((_, c) => (
-          <rect class="bar bar--v" x={c * cell} y="0" width={bar} height={h} style={`--i:${c}`} />
-        ))}
-      </g>
+    <svg class="celosia" viewBox={`0 0 ${w} ${h}`} width={w} height={h}>
+      {Array.from({ length: rows + 1 }).map((_, r) => <rect class="bar bar--h" x="0" y={r * cell} width={w} height={bar} style={`--i:${r}`} />)}
+      {Array.from({ length: cols + 1 }).map((_, c) => <rect class="bar bar--v" x={c * cell} y="0" width={bar} height={h} style={`--i:${c}`} />)}
       <rect class="green" x={gCol * cell + bar} y={gRow * cell + bar} width={cell - bar} height={cell - bar} />
     </svg>
-    <p class="preloader__word t-label">Casa Meyer</p>
+    <p class="preloader__word">Casa Meyer</p>
   </div>
   <div class="preloader__gate"></div>
 </div>
-
-<style define:vars={{ cols, rows }}>
-  .preloader {
-    display: none;
-    position: fixed; inset: 0; z-index: 1000;
-    background: var(--white);
-    overflow: hidden;
-  }
+<style>
+  .preloader { display: none; position: fixed; inset: 0; z-index: 20000; background: var(--paper); overflow: hidden; }
   html.is-loading .preloader { display: block; }
   html.is-loading { overflow: hidden; }
-
-  .preloader__panel {
-    position: absolute; inset: 0;
-    display: grid; place-items: center; align-content: center; gap: 28px;
-  }
-  .celosia { width: min(68vw, 320px); height: auto; overflow: visible; }
-
-  .bar { fill: var(--pink); transform-origin: 0 0; }
-  .bar--h { transform: scaleX(0); animation: barH 0.55s var(--ease) forwards; animation-delay: calc(var(--i) * 55ms); }
-  .bar--v { transform: scaleY(0); animation: barV 0.55s var(--ease) forwards; animation-delay: calc(240ms + var(--i) * 55ms); }
+  .preloader__panel { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 2rem; }
+  .celosia { width: min(68vw, 22rem); height: auto; overflow: visible; }
+  .bar { fill: var(--accent); transform-origin: 0 0; }
+  .bar--h { transform: scaleX(0); animation: barH .55s cubic-bezier(.22,1,.36,1) forwards; animation-delay: calc(var(--i) * 55ms); }
+  .bar--v { transform: scaleY(0); animation: barV .55s cubic-bezier(.22,1,.36,1) forwards; animation-delay: calc(240ms + var(--i) * 55ms); }
   @keyframes barH { to { transform: scaleX(1); } }
   @keyframes barV { to { transform: scaleY(1); } }
-
-  .green { fill: var(--green); opacity: 0; animation: pop 0.35s var(--ease) forwards; animation-delay: 1.35s; }
-  @keyframes pop { from { opacity: 0; transform: scale(0.4); transform-origin: center; transform-box: fill-box; } to { opacity: 1; transform: scale(1); transform-origin: center; transform-box: fill-box; } }
-
-  .preloader__word { color: var(--black); opacity: 0; animation: fade 0.6s var(--ease) forwards; animation-delay: 0.9s; }
+  .green { fill: var(--green); opacity: 0; transform-box: fill-box; transform-origin: center; animation: pop .35s cubic-bezier(.22,1,.36,1) forwards; animation-delay: 1.35s; }
+  @keyframes pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+  .preloader__word { font: 400 1rem/1.1 var(--font-sans); letter-spacing: .3em; text-transform: uppercase; color: var(--black); opacity: 0; animation: fade .6s forwards; animation-delay: .9s; margin: 0; }
   @keyframes fade { to { opacity: 1; } }
-
-  /* the gate: a yellow panel that slides across the whole screen left to right */
-  .preloader__gate {
-    position: absolute; inset: 0;
-    background: var(--yellow);
-    transform: translateX(-101%);
-  }
-  .preloader.is-closing .preloader__gate { animation: gate 1.25s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
-  @keyframes gate {
-    0%   { transform: translateX(-101%); }
-    45%  { transform: translateX(0); }
-    55%  { transform: translateX(0); }
-    100% { transform: translateX(101%); }
-  }
-  .preloader.is-closing .preloader__panel { animation: hidePanel 0.01s linear forwards; animation-delay: 0.6s; }
-  @keyframes hidePanel { to { opacity: 0; } }
-  .preloader.is-closing { animation: bg 0.01s linear forwards; animation-delay: 0.6s; }
+  .preloader__gate { position: absolute; inset: 0; background: var(--yellow); transform: translateX(-101%); }
+  .preloader.is-closing .preloader__gate { animation: gate 1.25s cubic-bezier(.76,0,.24,1) forwards; }
+  @keyframes gate { 0% { transform: translateX(-101%); } 45% { transform: translateX(0); } 55% { transform: translateX(0); } 100% { transform: translateX(101%); } }
+  .preloader.is-closing .preloader__panel { animation: hide .01s linear forwards; animation-delay: .6s; }
+  .preloader.is-closing { animation: bg .01s linear forwards; animation-delay: .6s; }
+  @keyframes hide { to { opacity: 0; } }
   @keyframes bg { to { background: transparent; } }
-
-  @media (prefers-reduced-motion: reduce) {
-    .bar--h, .bar--v, .green, .preloader__word { animation: none; transform: none; opacity: 1; }
-  }
 </style>
-
 <script is:inline>
-  // Decide before first paint whether to show the preloader, so there is no flash.
   (function () {
     try {
       var seen = sessionStorage.getItem('cm-loaded');
@@ -95,24 +52,20 @@ const gRow = 7;
   })();
 </script>
 <script>
-  function runPreloader() {
+  (function () {
     const html = document.documentElement;
     const el = document.getElementById('preloader');
     if (!el || !html.classList.contains('is-loading')) return;
     const start = performance.now();
-    const minShow = 1900; // let the lattice finish drawing
     const close = () => {
-      const wait = Math.max(0, minShow - (performance.now() - start));
+      const wait = Math.max(0, 1900 - (performance.now() - start));
       setTimeout(() => {
         el.classList.add('is-closing');
-        // reveal the page as the gate passes the middle of the screen
-        setTimeout(() => { html.classList.remove('is-loading'); html.classList.add('is-loaded'); }, 620);
+        setTimeout(() => { html.classList.remove('is-loading'); }, 620);
         setTimeout(() => { el.remove(); }, 1400);
         try { sessionStorage.setItem('cm-loaded', '1'); } catch (e) {}
       }, wait);
     };
-    if (document.readyState === 'complete') close();
-    else window.addEventListener('load', close, { once: true });
-  }
-  runPreloader();
+    if (document.readyState === 'complete') close(); else addEventListener('load', close, { once: true });
+  })();
 </script>

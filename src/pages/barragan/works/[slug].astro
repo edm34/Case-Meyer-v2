@@ -1,0 +1,10 @@
+---
+import ItemDetail from '../../../components/ItemDetail.astro';
+import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+  const items = (await getCollection('works')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+  return items.filter((it) => it.data.detail).map((it) => ({ params: { slug: it.id }, props: { item: it, items } }));
+}
+const { item, items } = Astro.props;
+---
+<ItemDetail section="barragan" child="works" item={item} items={items} basePath="/barragan/works/" moreTitle="More works" />

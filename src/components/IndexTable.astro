@@ -1,0 +1,74 @@
+---
+/**
+ * Full-width ruled table of records. Rows with a detail page are links and
+ * show a thumbnail and an arrow. Optional filter input above.
+ */
+import { url } from '../lib/url';
+export interface Row { id: string; title: string; year: string; category?: string; notes?: string; location?: string; thumb?: string; href?: string; current?: boolean; }
+const { rows, filter = false, id = 'index' } = Astro.props as { rows: Row[]; filter?: boolean; id?: string };
+---
+{filter && (
+  <div class="filter reveal">
+    <label class="sr-only" for={`${id}-filter`}>Filter the list</label>
+    <span class="filter__glass" aria-hidden="true"></span>
+    <input id={`${id}-filter`} type="search" placeholder="Filter" data-filter-for={id} autocomplete="off" />
+    <button type="button" class="filter__clear" data-filter-clear={id} aria-label="Clear filter"></button>
+  </div>
+)}
+<div class="itable" id={id}>
+  {rows.map((r) => {
+    const Tag = r.href ? 'a' : 'div';
+    const text = [r.title, r.category, r.notes, r.location].filter(Boolean).join(' ');
+    return (
+      <Tag class:list={['itable__row', { 'itable__row--link': !!r.href, 'itable__row--current': r.current }]} href={r.href ? url(r.href) : undefined} data-text={text}>
+        <span class="c c-img">{r.href && r.thumb && <img src={url(r.thumb)} alt="" loading="lazy" />}</span>
+        <span class="c c-year">{r.year}</span>
+        <span class="c c-title">{r.title}</span>
+        <span class="c c-cat">{r.category}</span>
+        <span class="c c-notes">{r.notes}</span>
+        <span class="c c-loc">{r.location}</span>
+        <span class="c c-arrow" aria-hidden="true">{r.href ? '→' : ''}</span>
+      </Tag>
+    );
+  })}
+</div>
+<style>
+  .filter { position: relative; width: 40%; margin: 1rem auto 4rem; }
+  .filter input { width: 100%; font: 400 1.5rem/1.2 var(--font-sans); color: var(--black); border: 1px solid var(--black); border-radius: .4rem; padding: .4rem 2.5rem .4rem 3rem; background: transparent; -webkit-appearance: none; }
+  .filter input::-webkit-search-cancel-button { display: none; }
+  .filter__glass { position: absolute; left: .9rem; top: 50%; width: 1.4rem; height: 1.4rem; margin-top: -.9rem; border: 1px solid var(--black); border-radius: 50%; }
+  .filter__glass::after { content: ""; position: absolute; left: 1.1rem; top: 1.1rem; width: 1px; height: 1rem; background: var(--black); transform: rotate(-40deg); transform-origin: top; }
+  .filter__clear { position: absolute; right: .6rem; top: 50%; width: 2rem; height: 2rem; margin-top: -1rem; }
+  .filter__clear::before, .filter__clear::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--black); }
+  .filter__clear::before { transform: rotate(45deg); } .filter__clear::after { transform: rotate(-45deg); }
+
+  .itable { width: 100vw; }
+  .itable__row { display: flex; align-items: flex-start; width: 100%; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); margin-bottom: -2px; background: var(--paper); color: var(--black); }
+  .itable__row[hidden] { display: none; }
+  .itable__row--link:hover, .itable__row--link:focus-visible { background: var(--row-hover); }
+  .itable__row--current { background: var(--row-current); }
+  .c { font: 400 1rem/1.1 var(--font-sans); padding: .5rem; min-height: 1rem; }
+  .c-img { width: 5%; } .c-img img { max-height: 4rem; width: auto; max-width: 100%; object-fit: contain; }
+  .c-year { width: 12%; text-align: right; font-variant-numeric: tabular-nums; }
+  .c-title { width: 22%; } .c-cat { width: 16.6667%; } .c-notes { width: 22%; } .c-loc { width: 16.6667%; }
+  .c-arrow { width: 2rem; flex: 0 0 2rem; }
+  @media (max-width: 767px) {
+    .filter { width: 80%; }
+    .c { font-size: max(1rem, 12px); }
+    .c-img { width: 9%; } .c-year { width: 20%; } .c-title { width: 35%; } .c-loc { width: 30%; }
+    .c-cat, .c-notes { display: none; }
+  }
+</style>
+<script>
+  const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  document.querySelectorAll<HTMLInputElement>('[data-filter-for]').forEach((input) => {
+    const table = document.getElementById(input.dataset.filterFor!)!;
+    const rows = Array.from(table.querySelectorAll<HTMLElement>('.itable__row'));
+    const apply = () => {
+      const q = norm(input.value.trim());
+      rows.forEach((r) => { r.hidden = !!q && !norm(r.dataset.text || '').includes(q); });
+    };
+    input.addEventListener('input', apply);
+    document.querySelector<HTMLButtonElement>(`[data-filter-clear="${input.dataset.filterFor}"]`)?.addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
+  });
+</script>

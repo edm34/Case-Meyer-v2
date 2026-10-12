@@ -1,0 +1,50 @@
+{
+  "title": "Press",
+  "description": "Images and documents for press use.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>The images below may be used for editorial coverage of Casa Meyer under the following conditions:</p><ul><li>credit as given with each file</li><li>no cropping or alteration of the drawings</li><li>a copy of the publication sent to us</li></ul>"
+    },
+    {
+      "type": "downloads",
+      "groups": [
+        {
+          "title": "Drawings",
+          "files": [
+            {
+              "label": "Fachada Sur",
+              "href": "/images/drawing-fachada-sur.jpg",
+              "thumb": "/images/drawing-fachada-sur.jpg"
+            },
+            {
+              "label": "Fachada Poniente",
+              "href": "/images/drawing-fachada-poniente.jpg",
+              "thumb": "/images/drawing-fachada-poniente.jpg"
+            },
+            {
+              "label": "Celosía",
+              "href": "/images/drawing-celosia.jpg",
+              "thumb": "/images/drawing-celosia.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Photographs",
+          "files": [
+            {
+              "label": "Street facade",
+              "href": "/images/facade-street.jpg",
+              "thumb": "/images/facade-street.jpg"
+            },
+            {
+              "label": "Barbara and Luis",
+              "href": "/images/barbara-and-luis.jpg",
+              "thumb": "/images/barbara-and-luis.jpg"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

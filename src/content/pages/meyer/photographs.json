@@ -1,0 +1,48 @@
+{
+  "title": "Photographs",
+  "description": "Photographs of Barbara Meyer, Luis Barragán and the house.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Photographs from the family's own albums. More will be added as they are scanned.</p>"
+    },
+    {
+      "type": "gallery",
+      "size": "large",
+      "images": [
+        {
+          "src": "/images/barbara-and-luis.jpg",
+          "alt": "Black and white print of Barbara Meyer in a headscarf beside Luis Barragán in a hat and glasses",
+          "width": 1500,
+          "height": 1125,
+          "caption": "Barbara Meyer and Luis Barragán.",
+          "credit": "Family collection"
+        },
+        {
+          "src": "/images/facade-street.jpg",
+          "alt": "The street facade of Casa Meyer: a long white wall with a yellow sliding gate under a hedge of vines and bougainvillea",
+          "width": 2000,
+          "height": 1500,
+          "caption": "The street facade.",
+          "credit": "Family collection"
+        },
+        {
+          "src": "/images/watercolor-barbara-luis.jpg",
+          "alt": "Sepia watercolor of Barbara Meyer and Luis Barragán",
+          "width": 1200,
+          "height": 896,
+          "caption": "Barbara and Luis, watercolor.",
+          "credit": "Artist to be confirmed"
+        },
+        {
+          "src": "/images/watercolor-facade.jpg",
+          "alt": "Watercolor of the street facade with the yellow gate",
+          "width": 1200,
+          "height": 896,
+          "caption": "The street facade, watercolor.",
+          "credit": "Artist to be confirmed"
+        }
+      ]
+    }
+  ]
+}

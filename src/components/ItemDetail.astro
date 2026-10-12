@@ -1,0 +1,106 @@
+---
+/**
+ * Detail page for an index item: visible title that pins under the
+ * sub-navigation, cover band, intro with meta sidebar, blocks, map with
+ * inset, and the "more items" scroller of the whole index.
+ */
+import SectionPage from '../layouts/SectionPage.astro';
+import Blocks from './Blocks.astro';
+import MapBlock from './MapBlock.astro';
+import IndexTable from './IndexTable.astro';
+import { url } from '../lib/url';
+
+interface Item { id: string; data: any }
+const { section, child, item, items, basePath, moreTitle } = Astro.props as { section: string; child: string; item: Item; items: Item[]; basePath: string; moreTitle: string };
+const d = item.data;
+const det = d.detail ?? {};
+const rows = items.map((it) => ({
+  id: it.id, title: it.data.title, year: it.data.year, category: it.data.category, notes: it.data.notes, location: it.data.location,
+  thumb: it.data.thumb, href: it.data.detail ? `${basePath}${it.id}/` : undefined, current: it.id === item.id,
+}));
+const points = items.filter((it) => it.data.lat != null).map((it) => ({ id: it.id, title: it.data.title, year: it.data.year, address: it.data.address, lat: it.data.lat, lng: it.data.lng, href: it.data.detail ? url(`${basePath}${it.id}/`) : undefined }));
+const center = points.find((p) => p.id === item.id);
+const metaHtml = det.meta ? det.meta.replace(/href="\//g, `href="${import.meta.env.BASE_URL.replace(/\/$/, '')}/`) : '';
+---
+<SectionPage section={section} child={child} title={d.title} description={det.intro} variant="detail" image={det.cover?.src} flushFooter={true} hideTitle={false}>
+  <Fragment slot="before">
+    <h1 class="dtitle" id="dtitle">{d.title}</h1>
+    {det.cover && (
+      <figure class="cover reveal">
+        <img src={url(det.cover.src)} alt={det.cover.alt} loading="eager" fetchpriority="high" />
+        {(det.cover.caption || det.cover.credit) && <figcaption>{det.cover.caption}{det.cover.credit && <span class="credit">{det.cover.credit}</span>}</figcaption>}
+      </figure>
+    )}
+  </Fragment>
+
+  {det.intro ? <div class="b-intro reveal"><p set:html={det.intro} /></div> : null}
+  <aside class:list={['meta reveal', { 'meta--alone': !det.intro }]}>
+    <ul class="meta__list">
+      {d.address && <li class="meta__item">{d.address}<a class="meta__pill" href="#map">Show on map</a></li>}
+      <li class="meta__item">{d.year}</li>
+      {d.category && <li class="meta__item">{d.category}</li>}
+      {metaHtml && <li class="meta__item" set:html={metaHtml} />}
+    </ul>
+  </aside>
+  <div class="break"></div>
+  <Blocks blocks={det.blocks ?? []} imageMax="70vh" />
+
+  <Fragment slot="after">
+    {center && <div id="map" class="mapwrap"><MapBlock points={points} center={center} variant="detail" /></div>}
+    <h2 class="more__title">{moreTitle}</h2>
+    <div class="more" id="more" data-more>
+      <IndexTable rows={rows} id="moreTable" />
+    </div>
+  </Fragment>
+</SectionPage>
+
+<style>
+  .dtitle { margin-top: 10rem; min-height: 6rem; padding: 1rem 10rem 0; text-align: center; font: 400 5rem/1.1 var(--font-sans); letter-spacing: -.05em; color: var(--black); }
+  .dtitle.is-pinned { position: fixed; top: 5.2rem; left: 0; right: 0; margin: 0; min-height: 0; padding: 0 10rem; font-size: 2.5rem; z-index: 1003; }
+  .dtitle-spacer { height: 7rem; }
+  .cover { margin: 7rem 2rem 4rem; background: var(--panel-soft); padding: 2rem 0; }
+  .cover img { height: calc(70vh - 2rem); width: auto; max-width: 100%; margin: 0 auto; object-fit: contain; }
+  .cover figcaption { text-align: center; margin-top: 1rem; }
+  .cover .credit { display: block; color: var(--grey); }
+  .meta { width: var(--col-2); }
+  .meta__list { width: 91.6667%; margin-left: auto; border-top: 1px solid var(--black); }
+  .meta__item { font: 400 1rem/1.2 var(--font-sans); padding: .15rem 0; border-bottom: 1px solid var(--black); }
+  .meta__item :global(a) { text-decoration: underline; }
+  .meta__pill { display: block; width: 70%; margin: 1rem 15%; text-align: center; border: 1px solid var(--black); border-radius: 2rem; padding: .3rem 0 .5rem; font-size: 1rem; text-decoration: none !important; color: var(--black); transition: color var(--t-hover), border-color var(--t-hover); }
+  .meta__pill:hover { color: var(--grey); border-color: var(--grey-line); }
+  .meta--alone { width: 50%; }
+  .mapwrap { margin-top: 3rem; }
+  .more__title { text-align: center; font: 400 1.5rem/1.1 var(--font-sans); margin: 6rem 0 2rem; }
+  .more { height: 60vh; overflow: hidden; border-top: 1px solid var(--black); border-bottom: 1px solid var(--black); }
+  .more.is-scrollable { overflow-y: auto; }
+  @media (max-width: 767px) {
+    .dtitle { font-size: 2.5rem; padding: 1rem; margin-top: 2rem; }
+    .dtitle.is-pinned { position: static; font-size: 2.5rem; padding: 1rem; }
+    .cover { margin: 2rem 0; padding: 0; }
+    .cover img { height: auto; max-height: 70vh; }
+    .meta, .meta--alone { width: 100%; }
+    .meta__list { width: 100%; }
+    .meta__item { padding: 1rem; }
+  }
+</style>
+<script>
+  // Pin the title as a second header row once scrolling passes 30vw (desktop).
+  const t = document.getElementById('dtitle');
+  if (t) {
+    const spacer = document.createElement('div'); spacer.className = 'dtitle-spacer'; spacer.hidden = true; t.after(spacer);
+    const onScroll = () => {
+      if (matchMedia('(max-width: 767px)').matches) { t.classList.remove('is-pinned'); spacer.hidden = true; return; }
+      const pin = scrollY > innerWidth * 0.3;
+      t.classList.toggle('is-pinned', pin); spacer.hidden = !pin;
+    };
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  }
+  // "More items": scroll the current row to just above the middle; inner scroll only while fully in view.
+  const more = document.getElementById('more');
+  if (more) {
+    const cur = more.querySelector<HTMLElement>('.itable__row--current');
+    if (cur) more.scrollTop = Math.max(0, cur.offsetTop - more.clientHeight * 0.4);
+    const check = () => { const r = more.getBoundingClientRect(); more.classList.toggle('is-scrollable', r.top >= 0 && r.bottom <= innerHeight); };
+    addEventListener('scroll', check, { passive: true }); check();
+  }
+</script>

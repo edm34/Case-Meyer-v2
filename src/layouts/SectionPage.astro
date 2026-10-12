@@ -1,0 +1,18 @@
+---
+/** A page inside one of the four primary sections: header, sub-navigation, hidden h1, content flow. */
+import Base from './Base.astro';
+import SubNav from '../components/SubNav.astro';
+import { sectionBySlug } from '../lib/site';
+interface Props { section: string; child: string; title: string; description?: string; variant?: 'page' | 'detail'; image?: string; flushFooter?: boolean; hideTitle?: boolean; }
+const { section, child, title, description, variant = 'page', image, flushFooter = false, hideTitle = true } = Astro.props;
+const sec = sectionBySlug(section)!;
+---
+<Base title={title} description={description} variant={variant} activeSection={sec.key} image={image} flushFooter={flushFooter}>
+  <SubNav section={sec} active={child} />
+  {hideTitle && <h1 class="sr-only">{title}</h1>}
+  <slot name="before" />
+  <div class="flow content">
+    <slot />
+  </div>
+  <slot name="after" />
+</Base>

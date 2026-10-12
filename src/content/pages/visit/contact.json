@@ -1,0 +1,15 @@
+{
+  "title": "Contact",
+  "description": "Contact Casa Meyer.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Visits, press and research enquiries.</p>"
+    },
+    {
+      "type": "text",
+      "placement": "centre",
+      "html": "<p>Casa Meyer<br>Bosques de las Lomas<br>Mexico City</p><p><a href=\"mailto:visit@example.com\">visit@example.com</a><br>[Telephone to be confirmed]</p><p>The exact address is sent with a confirmed visit.</p>"
+    }
+  ]
+}

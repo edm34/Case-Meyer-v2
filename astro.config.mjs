@@ -13,4 +13,13 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   devToolbar: { enabled: false },
+  // A primary section has no page of its own: its URL goes to the first child.
+  redirects: Object.fromEntries(
+    Object.entries({
+      '/casa': '/casa/house/',
+      '/barragan': '/barragan/biography/',
+      '/meyer': '/meyer/friendship/',
+      '/visit': '/visit/visits/',
+    }).map(([from, to]) => [from, `${base.replace(/\/$/, '')}${to}`]),
+  ),
 });

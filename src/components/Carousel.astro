@@ -1,0 +1,106 @@
+---
+/**
+ * Horizontal carousel of whole images. "large" is a full-width band,
+ * "small" a 50vw block with arrows outside. "feature" is the home variant
+ * (110vh band, images link to their pages).
+ */
+import { url } from '../lib/url';
+interface Slide { src: string; alt?: string; caption?: string; credit?: string; href?: string; }
+const { slides, size = 'large', maxH } = Astro.props as { slides: Slide[]; size?: 'large' | 'small' | 'feature'; maxH?: string };
+---
+<div class:list={['car', `car--${size}`]} data-carousel style={maxH ? `--img-max:${maxH}` : undefined}>
+  <div class="car__track" data-track>
+    {slides.map((s, i) => (
+      <figure class="car__slide" data-slide aria-hidden={i === 0 ? undefined : 'true'}>
+        {s.href ? (
+          <a class="car__link" href={url(s.href)}>
+            <img src={url(s.src)} alt={s.alt ?? ''} loading={i === 0 ? 'eager' : 'lazy'} draggable="false" />
+            <figcaption class="car__cap car__cap--feature">{s.caption} →</figcaption>
+          </a>
+        ) : (
+          <>
+            <img src={url(s.src)} alt={s.alt ?? ''} loading={i === 0 ? 'eager' : 'lazy'} draggable="false" />
+            <figcaption class="car__cap">{s.caption}{s.credit && <span class="car__credit">{s.credit}</span>}</figcaption>
+          </>
+        )}
+      </figure>
+    ))}
+  </div>
+  <button class="car__arrow car__arrow--prev" data-prev aria-label="Previous image"><svg viewBox="0 0 50 120" aria-hidden="true"><polyline points="15,120 1,60 15,0" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></button>
+  <button class="car__arrow car__arrow--next" data-next aria-label="Next image"><svg viewBox="0 0 50 120" aria-hidden="true"><polyline points="35,120 49,60 35,0" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></button>
+</div>
+<style>
+  .car { position: relative; overflow: hidden; user-select: none; }
+  .car--large { width: 100vw; background: var(--panel-soft); padding: 2rem 0 1rem; margin: 3rem 0; }
+  .car--small { width: 50vw; margin: 0 auto 3rem; overflow: visible; }
+  .car--feature { width: 100vw; height: 110vh; background: var(--panel); }
+  .car__track { display: flex; transition: transform .5s ease; will-change: transform; }
+  .car__slide { flex: 0 0 100%; display: flex; flex-direction: column; align-items: center; cursor: grab; }
+  .car--large .car__slide { flex-basis: calc(100% - 100px); margin: 0 50px; }
+  .car--feature .car__slide { padding-top: 8rem; }
+  .car__slide img { width: auto; max-width: 100%; max-height: var(--img-max, 80vh); object-fit: contain; }
+  .car--small .car__slide img { max-height: 65vh; }
+  .car--feature .car__slide img { height: 76vh; max-height: none; transition: transform var(--t-hover); }
+  .car--feature .car__link:hover img { transform: scale(1.01); }
+  .car__cap { text-align: center; width: 60%; margin: 1rem auto; font: 400 .8rem/1.2 var(--font-sans); color: var(--ink); }
+  .car__credit { display: block; color: var(--grey); }
+  .car__cap--feature { font-size: 1rem; padding: .5rem 0 1rem; width: auto; }
+  .car__cap--feature::before { content: "●"; color: transparent; }
+  .car__link:hover .car__cap--feature::before { color: var(--accent); }
+  .car__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 6rem; height: 24rem; z-index: 200; color: var(--black); display: flex; align-items: center; justify-content: center; }
+  .car__arrow svg { height: 100%; width: auto; }
+  .car__arrow:hover { opacity: .4; }
+  .car--large .car__arrow--prev, .car--feature .car__arrow--prev { left: 3.5rem; }
+  .car--large .car__arrow--next, .car--feature .car__arrow--next { right: 3.5rem; }
+  .car--small .car__arrow--prev { left: -6rem; }
+  .car--small .car__arrow--next { right: -6rem; }
+  @media (max-width: 767px) {
+    .car--large, .car--small { width: 100vw; margin: 1rem 0; padding: 0; }
+    .car--feature { height: 105vw; }
+    .car--feature .car__slide { padding-top: 2rem; }
+    .car__slide img, .car--large .car__slide img, .car--small .car__slide img, .car--feature .car__slide img { width: 100vw; height: auto; max-height: 90vw; object-fit: contain; }
+    .car--large .car__slide { flex-basis: 100%; margin: 0; }
+    .car__arrow { width: 4rem; height: 12rem; }
+    .car--large .car__arrow--prev, .car--feature .car__arrow--prev, .car--small .car__arrow--prev { left: 0; }
+    .car--large .car__arrow--next, .car--feature .car__arrow--next, .car--small .car__arrow--next { right: 0; }
+    .car__cap { font-size: max(.8rem, 12px); }
+  }
+</style>
+<script>
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    if (slides.length < 2) { root.querySelectorAll('.car__arrow').forEach((a) => a.remove()); return; }
+    let i = 0, startX = 0, dragging = false, moved = false;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const step = () => slides[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(slides[0]).marginLeft) || 0) * 2;
+    const go = (n: number, animate = true) => {
+      i = (n + slides.length) % slides.length;
+      track.style.transition = animate && !reduce ? '' : 'none';
+      track.style.transform = `translateX(${-i * step()}px)`;
+      slides.forEach((s, k) => s.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
+    };
+    root.querySelector('[data-prev]')?.addEventListener('click', (e) => { e.stopPropagation(); go(i - 1); });
+    root.querySelector('[data-next]')?.addEventListener('click', (e) => { e.stopPropagation(); go(i + 1); });
+    // click on the left half goes back, right half forward (not on links or arrows)
+    root.addEventListener('click', (e) => {
+      if (moved) { moved = false; return; }
+      const t = e.target as HTMLElement;
+      if (t.closest('a, button')) return;
+      const r = root.getBoundingClientRect();
+      go((e.clientX - r.left) < r.width / 2 ? i - 1 : i + 1);
+    });
+    root.addEventListener('pointerdown', (e) => { dragging = true; moved = false; startX = e.clientX; });
+    root.addEventListener('pointermove', (e) => { if (dragging && Math.abs(e.clientX - startX) > 8) moved = true; });
+    const end = (e: PointerEvent) => {
+      if (!dragging) return; dragging = false;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 40) { go(dx < 0 ? i + 1 : i - 1); moved = true; }
+    };
+    root.addEventListener('pointerup', end); root.addEventListener('pointercancel', end);
+    root.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => { if (moved) e.preventDefault(); }));
+    addEventListener('resize', () => go(i, false));
+    go(0, false);
+  }
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(initCarousel);
+</script>

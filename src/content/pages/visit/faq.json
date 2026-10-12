@@ -1,0 +1,40 @@
+{
+  "title": "Questions",
+  "description": "Frequently asked questions about visiting Casa Meyer.",
+  "blocks": [
+    {
+      "type": "intro",
+      "html": "<p>Answers to the questions we are asked most often. If yours is not here, write to us.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "Can I visit without an appointment?",
+      "html": "<p>No. The house is a private home and is opened only for arranged visits. Request a date on the Visits page and we will confirm by email.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "How many people can come?",
+      "html": "<p>[Group size to be confirmed.] Larger groups can be split across two slots.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "Is the house accessible?",
+      "html": "<p>[Accessibility notes: steps at the entrance, the stair, the garden paths. To be confirmed.]</p>"
+    },
+    {
+      "type": "faq",
+      "question": "May I take photographs?",
+      "html": "<p>Photographs for personal use are welcome. Tripods, lighting and commercial photography need prior arrangement.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "Where is the house?",
+      "html": "<p>In Bosques de las Lomas, in the west of Mexico City. The exact address is sent with your confirmation.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "Can I cancel or change my booking?",
+      "html": "<p>[Cancellation terms to be confirmed.]</p>"
+    }
+  ]
+}

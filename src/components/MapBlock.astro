@@ -1,0 +1,73 @@
+---
+/**
+ * Maps with Leaflet and the CARTO Positron grey basemap (no token needed).
+ * variant "all": 100vw × calc(100vh - 7rem), country level, scroll zoom off.
+ * variant "detail": 100vh main map at street level with an inset overview.
+ */
+interface Point { id: string; title: string; year?: string; address?: string; lat: number; lng: number; href?: string; }
+const { points, variant = 'all', center } = Astro.props as { points: Point[]; variant?: 'all' | 'detail'; center?: Point };
+const data = JSON.stringify({ points, center, variant });
+---
+<div class:list={['mapblock', `mapblock--${variant}`]} data-map={data}>
+  <div class="map map--main" data-map-main></div>
+  {variant === 'detail' && <div class="map map--inset" data-map-inset></div>}
+</div>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  .mapblock { position: relative; width: 100vw; }
+  .mapblock--all { height: calc(100vh - 7rem); }
+  .mapblock--detail { height: 100vh; border-top: 1px solid var(--black); border-bottom: 1px solid var(--black); }
+  .map--main { width: 100%; height: 100%; background: #f2f2f2; }
+  .map--inset { position: absolute; right: 1rem; bottom: 1rem; width: 20vw; height: 15vw; border: 1px solid var(--black); border-radius: 1rem; overflow: hidden; z-index: 999; background: #f2f2f2; }
+  :global(.leaflet-container) { font: 400 .8rem/1.2 var(--font-sans); }
+  :global(.leaflet-popup-content-wrapper) { border-radius: .4rem; box-shadow: none; border: 1px solid var(--black); }
+  :global(.leaflet-popup-content) { margin: .6rem .8rem; font: 400 1rem/1.2 var(--font-sans); }
+  :global(.leaflet-popup-content a) { text-decoration: underline; }
+  :global(.leaflet-control-zoom a) { border-radius: 0 !important; color: var(--black) !important; }
+  :global(.leaflet-bar) { border: 1px solid var(--black) !important; box-shadow: none !important; border-radius: 0 !important; }
+  @media (max-width: 767px) {
+    .mapblock--all { height: calc(100vh - 18rem); margin-top: 5rem; border-top: 1px solid var(--black); border-bottom: 1px solid var(--black); }
+    .mapblock--detail { height: 70vh; }
+    .map--inset { width: 70vw; height: 40vw; }
+  }
+</style>
+<script>
+  declare const L: any;
+  function loadLeaflet(): Promise<void> {
+    return new Promise((res, rej) => {
+      if ((window as any).L) return res();
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'; s.onload = () => res(); s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+  const tiles = () => L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>', subdomains: 'abcd', maxZoom: 19,
+  });
+  const dot = (p: any, current: boolean) => L.circleMarker([p.lat, p.lng], { radius: current ? 9 : 7, color: '#fff', weight: 1, fillColor: current ? '#c4328f' : '#444', fillOpacity: 1 });
+  const pin = (p: any) => L.marker([p.lat, p.lng], { icon: L.divIcon({ className: 'pin', html: '<svg width="28" height="40" viewBox="0 0 28 40"><path d="M14 0C6.3 0 0 6.3 0 14c0 10 14 26 14 26s14-16 14-26C28 6.3 21.7 0 14 0z" fill="#000"/><circle cx="14" cy="14" r="5" fill="#fff"/></svg>', iconSize: [28, 40], iconAnchor: [14, 40] }) });
+  const popup = (p: any) => `<strong>${p.href ? `<a href="${p.href}">${p.title}</a>` : p.title}</strong>${p.year ? `<br>${p.year}` : ''}${p.address ? `<br>${p.address}` : ''}`;
+
+  async function init(el: HTMLElement) {
+    const { points, center, variant } = JSON.parse(el.dataset.map || '{}');
+    await loadLeaflet();
+    const main = L.map(el.querySelector('[data-map-main]'), { scrollWheelZoom: false, zoomControl: variant === 'all', attributionControl: true });
+    tiles().addTo(main);
+    if (variant === 'all') {
+      const group = L.featureGroup(points.map((p: any) => dot(p, false).bindPopup(popup(p))));
+      group.addTo(main);
+      if (points.length) main.fitBounds(group.getBounds().pad(0.3)); else main.setView([23.6, -102.5], 5);
+      main.setZoom(Math.min(main.getZoom(), 10));
+    } else if (center) {
+      main.setView([center.lat, center.lng], 15);
+      pin(center).addTo(main).bindPopup(popup(center));
+      points.filter((p: any) => p.id !== center.id).forEach((p: any) => dot(p, false).bindPopup(popup(p)).addTo(main));
+      const insetEl = el.querySelector('[data-map-inset]');
+      if (insetEl) {
+        const inset = L.map(insetEl, { zoomControl: false, scrollWheelZoom: false, dragging: false, doubleClickZoom: false, attributionControl: false });
+        tiles().addTo(inset); inset.setView([center.lat, center.lng], 3); pin(center).addTo(inset);
+      }
+    }
+  }
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach(init);
+</script>

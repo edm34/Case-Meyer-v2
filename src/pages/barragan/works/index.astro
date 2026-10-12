@@ -1,0 +1,12 @@
+---
+import SectionPage from '../../../layouts/SectionPage.astro';
+import IndexTable from '../../../components/IndexTable.astro';
+import { getCollection } from 'astro:content';
+const items = (await getCollection('works')).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const rows = items.map((it) => ({ id: it.id, title: it.data.title, year: it.data.year, category: it.data.category, notes: it.data.notes, location: it.data.location, thumb: it.data.thumb, href: it.data.detail ? `/barragan/works/${it.id}/` : undefined }));
+---
+<SectionPage section="barragan" child="works" title="Works" description="An index of the works of Luis Barragán." flushFooter={true}>
+  <div class="b-intro reveal"><p>A selection of Barragán's works in order of date. Rows with an arrow open a page. The list will grow as it is researched.</p></div>
+  <div class="break"></div>
+  <IndexTable rows={rows} filter={true} id="works" />
+</SectionPage>
