@@ -1,0 +1,187 @@
+/* ------------------------------------------------------------------
+   CASA MEYER — global styles
+   Palette taken from the house: the yellow gate, the pink lattice,
+   the lime-washed walls and the single green square.
+   ------------------------------------------------------------------ */
+
+:root {
+  --white: #ffffff;
+  --paper: #f7f5f0;          /* lime-washed wall */
+  --black: #111111;
+  --grey: #6b6b6b;
+  --rule: #d9d6cf;
+
+  --yellow: #f5c400;         /* the gate */
+  --pink: #c4328f;           /* the celosía */
+  --pink-paper: #f2d9e4;     /* the pink drawing paper */
+  --green: #27d957;          /* the green square */
+
+  --font: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+
+  --gutter: clamp(16px, 3vw, 40px);
+  --header-h: 56px;
+  --max: 1680px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--black);
+  background: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+ul, ol { list-style: none; }
+h1, h2, h3, h4 { font-weight: 400; line-height: 1.1; }
+
+:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
+
+/* ---------- type scale ---------- */
+.t-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.t-xl { font-size: clamp(2.2rem, 6vw, 5.5rem); letter-spacing: -0.01em; line-height: 0.98; }
+.t-lg { font-size: clamp(1.6rem, 3.2vw, 2.8rem); letter-spacing: -0.01em; line-height: 1.05; }
+.t-md { font-size: clamp(1.15rem, 1.6vw, 1.45rem); line-height: 1.3; }
+.t-sm { font-size: 0.85rem; line-height: 1.4; }
+.t-grey { color: var(--grey); }
+
+/* ---------- layout ---------- */
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); }
+.rule { border-top: 1px solid var(--rule); }
+
+.section { padding: clamp(48px, 8vw, 128px) 0; }
+.section + .section { border-top: 1px solid var(--rule); }
+
+.prose { max-width: 62ch; }
+.prose p + p { margin-top: 1em; }
+.prose a { border-bottom: 1px solid var(--rule); }
+.prose a:hover { border-color: var(--black); }
+
+/* two-column editorial block: label left, text right */
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px var(--gutter);
+  padding: clamp(24px, 3vw, 40px) 0;
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 768px) {
+  .row { grid-template-columns: 3fr 9fr; }
+  .row--wide { grid-template-columns: 3fr 6fr 3fr; }
+}
+
+/* ---------- colour blocks (hard-edged, no gradients) ---------- */
+.block { display: block; }
+.block--yellow { background: var(--yellow); }
+.block--pink { background: var(--pink); }
+.block--paper { background: var(--paper); }
+.block--green { background: var(--green); }
+
+/* ---------- reveal on scroll ---------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.reveal.is-in { opacity: 1; transform: none; }
+html.no-js .reveal { opacity: 1; transform: none; }
+@media print { .reveal { opacity: 1; transform: none; } }
+
+/* ---------- figures ---------- */
+.figure { margin: 0; }
+.figure img { width: 100%; height: auto; background: var(--paper); }
+.figure figcaption { padding-top: 10px; font-size: 0.8rem; color: var(--grey); display: flex; justify-content: space-between; gap: 16px; }
+
+/* ---------- index lists (works / archive) ---------- */
+.index { border-top: 1px solid var(--rule); }
+.index__item {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: 12px var(--gutter);
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.index__item:hover .index__title { color: var(--pink); }
+.index__num { font-variant-numeric: tabular-nums; color: var(--grey); font-size: 0.8rem; }
+.index__title { font-size: clamp(1.1rem, 2vw, 1.6rem); line-height: 1.15; }
+.index__meta { color: var(--grey); font-size: 0.8rem; white-space: nowrap; }
+.index__thumb {
+  display: none;
+}
+@media (hover: hover) and (min-width: 960px) {
+  .index__thumb {
+    display: block;
+    position: fixed;
+    right: var(--gutter);
+    top: 50%;
+    width: min(32vw, 520px);
+    transform: translateY(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s var(--ease);
+    z-index: 5;
+  }
+  .index__item:hover .index__thumb { opacity: 1; }
+}
+
+/* ---------- image grid ---------- */
+.tiles { display: grid; gap: var(--gutter); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+.tile img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+.tile__cap { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; font-size: 0.8rem; }
+.tile__cap span:last-child { color: var(--grey); }
+.tile:hover .tile__cap span:first-child { color: var(--pink); }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 1px solid var(--black);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover { background: var(--black); color: var(--white); }
+.btn--yellow { background: var(--yellow); border-color: var(--yellow); }
+.btn--yellow:hover { background: var(--black); border-color: var(--black); }
+
+/* ---------- forms ---------- */
+.form { display: grid; gap: 20px var(--gutter); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .form { grid-template-columns: 1fr 1fr; } .form .span-2 { grid-column: span 2; } }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+.field input, .field select, .field textarea {
+  font: inherit; color: var(--black); background: transparent;
+  border: 0; border-bottom: 1px solid var(--black); border-radius: 0;
+  padding: 8px 0; width: 100%;
+}
+.field select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--black) 50%), linear-gradient(135deg, var(--black) 50%, transparent 50%); background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.field textarea { min-height: 120px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-bottom-color: var(--pink); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

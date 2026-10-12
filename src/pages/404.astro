@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+<Base title="Not found">
+  <section class="section">
+    <div class="wrap">
+      <p class="t-label t-grey">404</p>
+      <h1 class="t-xl" style="margin-top:16px">There is no door here.</h1>
+      <p style="margin-top:32px"><a class="btn" href={url('/')}>Back to the street</a></p>
+    </div>
+  </section>
+</Base>

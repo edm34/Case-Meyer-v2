@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../lib/site';
+const tours = (await getCollection('tours')).map((t) => t.data);
+const endpoint = site.bookingEndpoint;
+---
+<Base title="Visit" description="Request a private visit to Casa Meyer.">
+  <section class="section">
+    <div class="wrap">
+      <p class="t-label t-grey">Visit</p>
+      <h1 class="t-xl" style="margin-top:16px;max-width:16ch">By appointment.</h1>
+      <p class="t-md t-grey" style="margin-top:24px;max-width:52ch">Casa Meyer is a private home. Small groups are received on selected days. Tell us when you would like to come and we will reply with available dates.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="row">
+        <p class="t-label t-grey">Visits</p>
+        <ul class="tours">
+          {tours.map((t) => (
+            <li class="tours__item reveal">
+              <h3 class="t-md">{t.name}</h3>
+              <p class="t-sm t-grey">{t.duration} · {t.price}</p>
+              <p class="t-sm" style="margin-top:10px;max-width:50ch">{t.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="row">
+        <p class="t-label t-grey">Request</p>
+        <form class="form" id="bookingForm" method="post" action={endpoint || undefined} data-email={site.bookingEmail} data-endpoint={endpoint}>
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required /></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="date">Preferred date</label><input id="date" name="date" type="date" required /></div>
+          <div class="field"><label for="guests">Guests</label>
+            <select id="guests" name="guests" required>
+              <option value="" disabled selected>Select</option>
+              {[1,2,3,4,5,6].map((n) => <option value={n}>{n}</option>)}
+            </select>
+          </div>
+          <div class="field"><label for="tour">Visit</label>
+            <select id="tour" name="tour" required>
+              <option value="" disabled selected>Select</option>
+              {tours.map((t) => <option value={t.id}>{t.name}</option>)}
+            </select>
+          </div>
+          <div class="field"><label for="lang">Language</label>
+            <select id="lang" name="language">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+          <div class="field span-2"><label for="message">Message</label><textarea id="message" name="message"></textarea></div>
+          <div class="span-2"><button class="btn btn--yellow" type="submit">Send request</button></div>
+          <p class="t-sm t-grey span-2" id="bookingNote">We reply by email, usually within two days.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .tours { border-top: 1px solid var(--rule); }
+  .tours__item { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+</style>
+<script>
+  // Without a form endpoint, compose an email with the request instead.
+  function initBooking() {
+    const form = document.getElementById('bookingForm') as HTMLFormElement | null;
+    if (!form) return;
+    const endpoint = form.dataset.endpoint;
+    if (endpoint) return; // the endpoint handles the POST
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const lines = Array.from(fd.entries()).map(([k, v]) => `${k}: ${v}`);
+      const subject = encodeURIComponent('Visit request — Casa Meyer');
+      const body = encodeURIComponent(lines.join('\n'));
+      window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
+      const note = document.getElementById('bookingNote');
+      if (note) note.textContent = 'Your email app should open with the request. If it does not, write to ' + form.dataset.email + '.';
+    });
+  }
+  initBooking();
+  document.addEventListener('astro:page-load', initBooking);
+</script>

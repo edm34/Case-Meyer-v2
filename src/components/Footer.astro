@@ -1,0 +1,42 @@
+---
+import { site } from '../lib/site';
+import { url } from '../lib/url';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="footer__band" aria-hidden="true">
+    <span class="block block--yellow"></span>
+    <span class="block block--pink"></span>
+    <span class="block block--paper"></span>
+  </div>
+  <div class="wrap footer__inner">
+    <div class="footer__col">
+      <p class="t-label">Casa Meyer</p>
+      <p class="t-sm t-grey">Luis Barragán, 1978<br />Bosques de las Lomas, Mexico City</p>
+    </div>
+    <div class="footer__col">
+      <p class="t-label">Visit</p>
+      <p class="t-sm t-grey">Private visits by appointment.<br /><a href={url('/visit/')}>Request a visit</a></p>
+    </div>
+    <div class="footer__col">
+      <p class="t-label">Index</p>
+      <ul class="t-sm">
+        {site.nav.map((i) => <li><a href={url(i.href)}>{i.label}</a></li>)}
+      </ul>
+    </div>
+    <div class="footer__col footer__col--end">
+      <p class="t-sm t-grey">© {year} Casa Meyer. Drawings and photographs reproduced by permission of the family. <a href={url('/colophon/')}>Colophon</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { margin-top: clamp(48px, 8vw, 128px); border-top: 1px solid var(--rule); }
+  .footer__band { display: grid; grid-template-columns: 3fr 2fr 1fr; height: 14px; }
+  .footer__inner { display: grid; gap: 28px var(--gutter); padding-top: 40px; padding-bottom: 40px; grid-template-columns: 1fr 1fr; }
+  @media (min-width: 900px) { .footer__inner { grid-template-columns: repeat(4, 1fr); } }
+  .footer__col p + p, .footer__col p + ul { margin-top: 10px; }
+  .footer__col a:hover { color: var(--pink); }
+  .footer__col--end { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .footer__col--end { grid-column: auto; } }
+</style>

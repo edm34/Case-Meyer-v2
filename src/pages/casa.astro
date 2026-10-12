@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+<Base title="The House" description="The story of Casa Meyer, the last house designed by Luis Barragán, a gift for his friend Barbara Meyer.">
+  <section class="section">
+    <div class="wrap">
+      <p class="t-label t-grey">The House</p>
+      <h1 class="t-xl" style="margin-top:16px;max-width:18ch">A last house, for a friend.</h1>
+    </div>
+  </section>
+
+  <figure class="figure reveal">
+    <img src={url('/images/facade-street.jpg')} alt="The street facade of Casa Meyer with its yellow gate" loading="eager" />
+    <figcaption class="wrap"><span>Street facade.</span><span>Bosques de las Lomas</span></figcaption>
+  </figure>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="row">
+        <p class="t-label t-grey reveal">1978</p>
+        <div class="prose t-md reveal">
+          <p>On 31 October 1978 Luis Barragán signed two elevation drawings for a house in Bosques de las Lomas, on the western edge of Mexico City. Across the bottom of each he wrote a dedication: <em>para Baby Meyer de Garate, con todo cariño</em>. He was seventy-six.</p>
+          <p>Casa Meyer is the last residential project he designed. By the late 1970s his office had all but closed and his health was failing. He took on the house not as a commission but as a gift to Barbara Meyer, a friend of nearly twenty-five years.</p>
+        </div>
+      </div>
+      <div class="row">
+        <p class="t-label t-grey reveal">Barbara &amp; Luis</p>
+        <div class="reveal">
+          <figure class="figure" style="max-width:720px">
+            <img src={url('/images/barbara-and-luis.jpg')} alt="Barbara Meyer and Luis Barragán outdoors, in a black and white print" loading="lazy" />
+            <figcaption><span>Barbara Meyer and Luis Barragán.</span><span>Family collection</span></figcaption>
+          </figure>
+          <div class="prose t-md" style="margin-top:32px">
+            <p>[Story of the friendship: how Barbara and Luis met, the years they knew each other, and how the house came about. To be written with the family.]</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <p class="t-label t-grey reveal">The drawings</p>
+        <div class="reveal">
+          <div class="tiles" style="grid-template-columns:1fr 1fr">
+            <a class="tile" href={url('/archive/fachada-sur/')}>
+              <img src={url('/images/drawing-fachada-sur.jpg')} alt="Fachada Sur drawing" loading="lazy" />
+              <p class="tile__cap"><span>Fachada Sur</span><span>31 · X · 1978</span></p>
+            </a>
+            <a class="tile" href={url('/archive/fachada-poniente/')}>
+              <img src={url('/images/drawing-fachada-poniente.jpg')} alt="Fachada Poniente drawing" loading="lazy" />
+              <p class="tile__cap"><span>Fachada Poniente</span><span>31 · X · 1978</span></p>
+            </a>
+          </div>
+          <div class="prose t-md" style="margin-top:32px">
+            <p>The south and west elevations are drawn in pencil, the openings filled solid black, the planes shaded by hand. They show a house of stacked, windowless volumes, a tall chimney wall and a flight of steps running along the garden side. The elevations are the only drawings of the house in Barragán's own hand that the family holds.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <p class="t-label t-grey reveal">The house today</p>
+        <div class="prose t-md reveal">
+          <p>[A short account of the house now: who lives there, what has been kept, what has changed, and why it is being opened to visitors. To be written with the family.]</p>
+          <p style="margin-top:2em"><a class="btn" href={url('/spaces/')}>See the spaces</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

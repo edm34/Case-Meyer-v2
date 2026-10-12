@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import Slideshow from '../components/Slideshow.astro';
+import { getCollection } from 'astro:content';
+import { url } from '../lib/url';
+
+const slides = (await getCollection('slides')).map((s) => s.data);
+const spaces = (await getCollection('spaces')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base>
+  <Slideshow slides={slides} />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="row row--wide" style="border-top:0">
+        <p class="t-label t-grey reveal">Casa Meyer</p>
+        <div class="reveal">
+          <h1 class="t-lg">The last house designed by Luis Barragán, built in 1978 for his friend Barbara Meyer in Bosques de las Lomas, Mexico City.</h1>
+          <p class="t-md t-grey" style="margin-top:1.2em">It remains a private home. It can be visited by appointment.</p>
+          <p style="margin-top:2em"><a class="btn btn--yellow" href={url('/visit/')}>Request a visit</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="row">
+        <p class="t-label t-grey">Spaces</p>
+        <ul class="index">
+          {spaces.map((s, i) => (
+            <li>
+              <a class="index__item" href={url(`/spaces/${s.id}/`)}>
+                <span class="index__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="index__title">{s.data.title}</span>
+                <span class="index__meta">{s.data.subtitle}</span>
+                <img class="index__thumb" src={url(s.data.cover.src)} alt="" loading="lazy" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>

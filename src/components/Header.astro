@@ -1,0 +1,92 @@
+---
+import { site } from '../lib/site';
+import { url } from '../lib/url';
+const { overlay = false } = Astro.props as { overlay?: boolean };
+const path = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const isActive = (href: string) => path.startsWith(`${base}${href}`);
+---
+<header class:list={['header', { 'header--overlay': overlay }]} id="header">
+  <div class="header__inner">
+    <a class="header__brand t-label" href={url('/')} aria-label="Casa Meyer, home">
+      <span class="header__mark" aria-hidden="true"></span>
+      Casa Meyer
+    </a>
+    <nav class="header__nav" aria-label="Main">
+      <ul class="header__list" id="navList">
+        {site.nav.map((item) => (
+          <li>
+            <a class:list={['header__link t-label', { 'is-active': isActive(item.href) }]} href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <button class="header__toggle t-label" id="navToggle" aria-expanded="false" aria-controls="navList">
+      <span class="header__toggle-open">Menu</span>
+      <span class="header__toggle-close">Close</span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    height: var(--header-h);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .header--overlay {
+    position: fixed; left: 0; right: 0;
+    background: transparent; border-bottom-color: transparent;
+  }
+  .header--overlay.is-solid, .header--overlay.is-open { background: var(--white); border-bottom-color: var(--rule); }
+  .header__inner {
+    height: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
+    display: flex; align-items: center; justify-content: space-between; gap: var(--gutter);
+  }
+  .header__brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; }
+  .header__mark { width: 10px; height: 10px; background: var(--yellow); }
+  .header__brand:hover .header__mark { background: var(--pink); }
+
+  .header__list { display: flex; gap: clamp(16px, 2.4vw, 36px); }
+  .header__link { position: relative; padding: 4px 0; }
+  .header__link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--black); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
+  .header__link:hover::after, .header__link.is-active::after { transform: scaleX(1); }
+
+  .header__toggle { display: none; }
+  .header__toggle-close { display: none; }
+  .header.is-open .header__toggle-open { display: none; }
+  .header.is-open .header__toggle-close { display: inline; }
+
+  @media (max-width: 767px) {
+    .header__toggle { display: inline-block; }
+    .header__nav { position: fixed; inset: var(--header-h) 0 0 0; background: var(--white); display: none; padding: var(--gutter); }
+    .header.is-open .header__nav { display: block; }
+    .header__list { flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+    .header__list li { border-bottom: 1px solid var(--rule); }
+    .header__link { display: block; padding: 18px 0; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: none; }
+    .header__link::after { display: none; }
+    .header__link.is-active { color: var(--pink); }
+  }
+</style>
+
+<script>
+  function initHeader() {
+    const header = document.getElementById('header');
+    const toggle = document.getElementById('navToggle');
+    if (!header || !toggle) return;
+    toggle.addEventListener('click', () => {
+      const open = header.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    if (header.classList.contains('header--overlay')) {
+      const onScroll = () => header.classList.toggle('is-solid', window.scrollY > window.innerHeight * 0.85);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+  }
+  initHeader();
+  document.addEventListener('astro:after-swap', initHeader);
+</script>

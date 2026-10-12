@@ -1,0 +1,34 @@
+[
+  {
+    "id": "facade",
+    "src": "/images/facade-street.jpg",
+    "alt": "Street facade of Casa Meyer: a long white wall with a yellow sliding gate beneath a wall of vines and bougainvillea",
+    "caption": "Casa Meyer, Bosques de las Lomas, Mexico City. Street facade.",
+    "href": "/spaces/yellow-gate/",
+    "tone": "light"
+  },
+  {
+    "id": "fachada-sur",
+    "src": "/images/drawing-fachada-sur.jpg",
+    "alt": "Pencil elevation drawing titled Fachada Sur, dated 31 October 1978, dedicated to Baby Meyer de Garate",
+    "caption": "Fachada Sur. Luis Barragán, 31 October 1978.",
+    "href": "/archive/fachada-sur/",
+    "tone": "light"
+  },
+  {
+    "id": "celosia",
+    "src": "/images/drawing-celosia.jpg",
+    "alt": "Design drawing of the pink lattice screen with a single bright green square",
+    "caption": "Celosía. Study for the pink lattice.",
+    "href": "/archive/celosia/",
+    "tone": "light"
+  },
+  {
+    "id": "barbara-luis",
+    "src": "/images/barbara-and-luis.jpg",
+    "alt": "Black and white photograph of Barbara Meyer and Luis Barragán outdoors",
+    "caption": "Barbara Meyer and Luis Barragán.",
+    "href": "/casa/",
+    "tone": "light"
+  }
+]
