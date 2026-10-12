@@ -4,7 +4,7 @@
   "blocks": [
     {
       "type": "intro",
-      "html": "<p>Casa Meyer is a private home. Small groups are received on selected days, by appointment. Tell us when you would like to come and we will reply with available dates.</p>"
+      "html": "<p>Casa Meyer is a private home. Small groups are received on visiting days, and every visit is booked at least eight weeks in advance. Choose a day and a time below.</p>"
     },
     {
       "type": "text",
@@ -31,7 +31,7 @@
     },
     {
       "type": "subheading",
-      "text": "Request a visit"
+      "text": "Book a visit"
     },
     {
       "type": "break"

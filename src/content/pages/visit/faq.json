@@ -9,7 +9,12 @@
     {
       "type": "faq",
       "question": "Can I visit without an appointment?",
-      "html": "<p>No. The house is a private home and is opened only for arranged visits. Request a date on the Visits page and we will confirm by email.</p>"
+      "html": "<p>No. The house is a private home and is opened only for booked visits. Visits are booked at least eight weeks ahead on the Visits page, where the calendar shows the days and times still open.</p>"
+    },
+    {
+      "type": "faq",
+      "question": "Why eight weeks ahead?",
+      "html": "<p>The house is lived in. Visiting days are set with the family well in advance, so the calendar opens eight weeks from today and runs about six months ahead.</p>"
     },
     {
       "type": "faq",

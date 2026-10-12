@@ -1,0 +1,211 @@
+---
+/**
+ * Calendar booking. The earliest bookable day is `leadTimeDays` from today
+ * (eight weeks). Visiting days, slots, closed dates and taken slots come
+ * from src/content/availability.json. Without a booking endpoint the
+ * confirmed slot and details are sent as an email draft.
+ */
+import { getCollection } from 'astro:content';
+import { brand } from '../lib/site';
+import availability from '../content/availability.json';
+const tours = (await getCollection('tours')).map((t) => t.data);
+const cfg = JSON.stringify(availability);
+---
+<div class="book reveal" id="booking" data-config={cfg} data-email={brand.email} data-endpoint={brand.bookingEndpoint}>
+  <div class="book__step" data-step="1">
+    <p class="book__lead">Visits are booked at least eight weeks ahead. Choose a day, then a time.</p>
+    <div class="cal">
+      <div class="cal__head">
+        <button type="button" class="cal__nav" data-cal-prev aria-label="Previous month">←</button>
+        <h3 class="cal__month" data-cal-month aria-live="polite"></h3>
+        <button type="button" class="cal__nav" data-cal-next aria-label="Next month">→</button>
+      </div>
+      <div class="cal__dow" aria-hidden="true"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+      <div class="cal__grid" data-cal-grid role="grid"></div>
+    </div>
+    <div class="slots" data-slots hidden>
+      <h3 class="slots__title" data-slots-title></h3>
+      <div class="slots__list" data-slots-list></div>
+    </div>
+  </div>
+
+  <form class="book__step form" data-step="2" hidden method="post" action={brand.bookingEndpoint || undefined} data-booking-form>
+    <p class="book__chosen span-2" data-chosen></p>
+    <input type="hidden" name="date" data-f-date />
+    <input type="hidden" name="time" data-f-time />
+    <div class="field"><label for="b-name">Name</label><input id="b-name" name="name" type="text" autocomplete="name" required /></div>
+    <div class="field"><label for="b-email">Email</label><input id="b-email" name="email" type="email" autocomplete="email" required /></div>
+    <div class="field"><label for="b-guests">Guests</label>
+      <select id="b-guests" name="guests" required data-f-guests><option value="" disabled selected>Select</option></select>
+    </div>
+    <div class="field"><label for="b-tour">Visit</label>
+      <select id="b-tour" name="tour" required><option value="" disabled selected>Select</option>{tours.map((t) => <option value={t.id}>{t.name}</option>)}</select>
+    </div>
+    <div class="field"><label for="b-lang">Language</label>
+      <select id="b-lang" name="language"><option value="en">English</option><option value="es">Español</option></select>
+    </div>
+    <div class="field"><label for="b-phone">Telephone (optional)</label><input id="b-phone" name="phone" type="tel" autocomplete="tel" /></div>
+    <div class="field span-2"><label for="b-msg">Message</label><textarea id="b-msg" name="message"></textarea></div>
+    <div class="span-2 book__actions">
+      <button class="pill" type="submit">Book this visit</button>
+      <button class="pill" type="button" data-back>Change the date</button>
+    </div>
+    <p class="note span-2" data-note>Your booking is confirmed by email within two days.</p>
+  </form>
+
+  <div class="book__step" data-step="3" hidden>
+    <p class="book__done" data-done></p>
+  </div>
+</div>
+
+<style is:global>
+  /* global: the calendar cells and slots are created at runtime and would miss Astro's scoped attribute */
+  .book [hidden] { display: none !important; }
+  .book { width: var(--col-6); margin-bottom: 3rem; scroll-margin-top: 7rem; }
+  .book__lead { font: 400 1.3rem/1.6rem var(--font-serif); color: var(--ink); margin: 0 0 2rem; }
+  .cal__head { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--black); padding: .6rem 0; }
+  .cal__month { font: 400 1.5rem/1.1 var(--font-sans); }
+  .cal__nav { font: 400 1.3rem/1 var(--font-sans); padding: .2rem .4rem; }
+  .cal__nav:disabled { opacity: .25; cursor: default; }
+  .cal__nav:not(:disabled):hover { color: var(--accent); }
+  .cal__dow, .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal__dow span { font: 400 .8rem/1.2 var(--font-sans); color: var(--grey); padding: .4rem 0 .3rem; border-top: 1px solid var(--black); border-bottom: 1px solid var(--black); }
+  .cal__day { position: relative; aspect-ratio: 1.5; border-bottom: 1px solid var(--black); font: 400 1.3rem/1.2 var(--font-sans); text-align: left; padding: .4rem .5rem; color: var(--black); }
+  .cal__day::before { content: "●"; color: transparent; margin-right: .15em; }
+  .cal__day:disabled { color: var(--grey-line); cursor: default; }
+  .cal__empty { border-bottom: 1px solid var(--black); }
+  .cal__day:not(:disabled):hover::before, .cal__day:not(:disabled):focus-visible::before { color: var(--accent); }
+  .cal__day[aria-pressed="true"] { background: var(--row-hover); }
+  .cal__day[aria-pressed="true"]::before { color: var(--accent); }
+  .cal__day.is-full { text-decoration: line-through; }
+  .slots { margin-top: 2rem; }
+  .slots__title { font: 400 1.3rem/1.2 var(--font-sans); margin-bottom: 1rem; }
+  .slots__list { display: flex; flex-wrap: wrap; gap: .8rem; }
+  .slot { display: inline-flex; flex-direction: column; align-items: center; min-width: 7rem; }
+  .slot small { font: 400 .7rem/1.2 var(--font-sans); color: var(--grey); margin-top: .3rem; }
+  .slot .pill:disabled { opacity: .35; cursor: default; }
+  .book .form { width: 100%; margin-top: 0; }
+  .book__chosen { font: 400 1.3rem/1.2 var(--font-sans); border-top: 1px solid var(--black); border-bottom: 1px solid var(--black); padding: .6rem 0; margin: 0 0 .5rem; }
+  .book__chosen::before { content: "● "; color: var(--accent); }
+  .book__actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .book__done { font: 400 2rem/1.15 var(--font-serif); color: var(--ink); }
+  @media (max-width: 767px) { .book { width: 100%; padding: 0 1rem; } .book .form { padding: 0; } .cal__day { font-size: max(1.3rem, 14px); padding: .3rem; } }
+</style>
+
+<script>
+  (function () {
+    const root = document.getElementById('booking');
+    if (!root) return;
+    const cfg = JSON.parse(root.dataset.config || '{}');
+    const email = root.dataset.email || '';
+    const endpoint = root.dataset.endpoint || '';
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const key = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const earliest = new Date(today); earliest.setDate(earliest.getDate() + (cfg.leadTimeDays ?? 56));
+    const latest = new Date(today); latest.setDate(latest.getDate() + (cfg.horizonDays ?? 180));
+    const visiting: number[] = cfg.visitingDays ?? [1, 2, 3, 4, 5];
+    const closed = new Set<string>(cfg.closedDates ?? []);
+    const booked: Record<string, string[]> = cfg.booked ?? {};
+    const slots: { time: string; label: string; capacity: number }[] = cfg.slots ?? [];
+    const takenCount = (dk: string, time: string) => (booked[dk] ?? []).filter((t) => t === time).length;
+    const slotOpen = (dk: string, s: typeof slots[number]) => takenCount(dk, s.time) < (s.capacity ?? 1);
+    const dayOpen = (d: Date) => {
+      if (d < earliest || d > latest) return false;
+      if (!visiting.includes(d.getDay())) return false;
+      const dk = key(d);
+      if (closed.has(dk)) return false;
+      return slots.some((s) => slotOpen(dk, s));
+    };
+    const monthName = (d: Date) => d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    const longDate = (d: Date) => d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    const grid = root.querySelector<HTMLElement>('[data-cal-grid]')!;
+    const monthEl = root.querySelector<HTMLElement>('[data-cal-month]')!;
+    const prev = root.querySelector<HTMLButtonElement>('[data-cal-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-cal-next]')!;
+    const slotsBox = root.querySelector<HTMLElement>('[data-slots]')!;
+    const slotsTitle = root.querySelector<HTMLElement>('[data-slots-title]')!;
+    const slotsList = root.querySelector<HTMLElement>('[data-slots-list]')!;
+    const steps = Array.from(root.querySelectorAll<HTMLElement>('[data-step]'));
+    const form = root.querySelector<HTMLFormElement>('[data-booking-form]')!;
+    const chosen = root.querySelector<HTMLElement>('[data-chosen]')!;
+    const fDate = root.querySelector<HTMLInputElement>('[data-f-date]')!;
+    const fTime = root.querySelector<HTMLInputElement>('[data-f-time]')!;
+    const fGuests = root.querySelector<HTMLSelectElement>('[data-f-guests]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
+    const done = root.querySelector<HTMLElement>('[data-done]')!;
+
+    let view = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
+    let selected: Date | null = null;
+    const firstMonth = new Date(earliest.getFullYear(), earliest.getMonth(), 1);
+    const lastMonth = new Date(latest.getFullYear(), latest.getMonth(), 1);
+    const show = (n: number) => steps.forEach((s) => { s.hidden = s.dataset.step !== String(n); });
+
+    function render() {
+      monthEl.textContent = monthName(view);
+      prev.disabled = view <= firstMonth;
+      next.disabled = view >= lastMonth;
+      grid.innerHTML = '';
+      const first = new Date(view.getFullYear(), view.getMonth(), 1);
+      const offset = (first.getDay() + 6) % 7; // Monday first
+      for (let i = 0; i < offset; i++) { const e = document.createElement('span'); e.className = 'cal__empty'; grid.appendChild(e); }
+      const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      for (let d = 1; d <= days; d++) {
+        const date = new Date(view.getFullYear(), view.getMonth(), d);
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'cal__day'; b.textContent = String(d);
+        b.setAttribute('aria-label', longDate(date));
+        const open = dayOpen(date);
+        b.disabled = !open;
+        if (!open && date >= earliest && date <= latest && visiting.includes(date.getDay()) && !closed.has(key(date))) b.classList.add('is-full');
+        b.setAttribute('aria-pressed', selected && key(selected) === key(date) ? 'true' : 'false');
+        b.addEventListener('click', () => { selected = date; render(); renderSlots(); });
+        grid.appendChild(b);
+      }
+      const tail = (7 - ((offset + days) % 7)) % 7;
+      for (let i = 0; i < tail; i++) { const e = document.createElement('span'); e.className = 'cal__empty'; grid.appendChild(e); }
+    }
+    function renderSlots() {
+      if (!selected) { slotsBox.hidden = true; return; }
+      const dk = key(selected);
+      slotsBox.hidden = false;
+      slotsTitle.textContent = longDate(selected);
+      slotsList.innerHTML = '';
+      slots.forEach((s) => {
+        const left = (s.capacity ?? 1) - takenCount(dk, s.time);
+        const wrap = document.createElement('div'); wrap.className = 'slot';
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'pill'; b.textContent = s.label || s.time; b.disabled = left <= 0;
+        const small = document.createElement('small'); small.textContent = left <= 0 ? 'Fully booked' : `${left} place${left === 1 ? '' : 's'} left`;
+        b.addEventListener('click', () => choose(dk, s, left));
+        wrap.append(b, small); slotsList.appendChild(wrap);
+      });
+      slotsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function choose(dk: string, s: typeof slots[number], left: number) {
+      fDate.value = dk; fTime.value = s.time;
+      chosen.textContent = `${longDate(selected!)}, ${s.label || s.time}`;
+      fGuests.innerHTML = '<option value="" disabled selected>Select</option>';
+      for (let i = 1; i <= Math.max(1, left); i++) { const o = document.createElement('option'); o.value = String(i); o.textContent = String(i); fGuests.appendChild(o); }
+      show(2);
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    root.querySelector('[data-back]')?.addEventListener('click', () => { show(1); });
+    prev.addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); render(); });
+    next.addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); render(); });
+
+    form.addEventListener('submit', (e) => {
+      if (endpoint) return; // the endpoint receives the POST
+      e.preventDefault();
+      const fd = new FormData(form);
+      const lines = Array.from(fd.entries()).map(([k, v]) => `${k}: ${v}`);
+      const subject = encodeURIComponent(`Visit booking — ${fd.get('date')} ${fd.get('time')} — Casa Meyer`);
+      location.href = `mailto:${email}?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
+      done.textContent = `Thank you. Your email app should open with the booking for ${chosen.textContent}. We confirm by email within two days. If nothing opened, write to ${email} with your date and time.`;
+      show(3);
+    });
+
+    render();
+  })();
+</script>

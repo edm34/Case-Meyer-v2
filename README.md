@@ -45,6 +45,21 @@ Article pages are a list of blocks, in order. A `break` starts a new row; a left
 
 Index items (works, spaces): `title`, `year`, `category`, `notes`, `location`, `address`, `lat`, `lng`, `thumb`, `order`, and an optional `detail` {`cover`, `intro`, `meta`, `blocks`}. Items with `detail` get a page and an arrow in the table.
 
+## Booking
+
+The Visits page has a calendar (`src/components/Booking.astro`). The earliest bookable day is eight weeks from the day the page is opened. Everything else is set in `src/content/availability.json`:
+
+| Key | Meaning |
+| --- | --- |
+| `leadTimeDays` | Days from today before the first bookable day (56 = eight weeks) |
+| `horizonDays` | How far ahead the calendar runs |
+| `visitingDays` | Weekdays with visits, 0 = Sunday … 6 = Saturday |
+| `slots` | Times offered each visiting day, with the places available per slot |
+| `closedDates` | Dates with no visits (holidays) |
+| `booked` | Slots already taken, date → list of times; a slot is greyed out once its capacity is reached |
+
+A visitor picks a day, then a time, then enters their details. With no `bookingEndpoint` in `src/lib/site.ts` the booking opens as an email draft to `brand.email`; set an endpoint (Formspree, Basin, a small function) to receive the POST instead. Until a booking service is wired in, keep `booked` up to date by hand so taken slots disappear from the calendar.
+
 ## Design
 
 - Fluid: `1rem = 1vw` on desktop (clamped 10–24 px), `3vw` on phones. Everything scales with the window.

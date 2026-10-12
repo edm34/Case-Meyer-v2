@@ -33,7 +33,8 @@ Highest-resolution originals, landscape where possible. One photo per file, name
 
 - Visit types, lengths and prices (MXN and/or USD).
 - Days and hours, group size limits, languages.
-- Where booking requests should go: an email address, or a form/booking service (Formspree, Tally, Calendly, Tock...). The form currently opens an email draft.
+- Where bookings should go. The calendar currently opens an email draft with the chosen date and time. To take bookings automatically and block taken slots without editing a file, I can wire it to a form endpoint plus a small booking store, or to Cal.com, which also supports an eight-week minimum notice.
+- Visiting days and times. The calendar is set to Tuesday to Saturday at 10:00, 12:00 and 16:00 with six places per slot; change `src/content/availability.json`.
 - Cancellation and photography rules, accessibility notes.
 
 ## 5. Design decisions

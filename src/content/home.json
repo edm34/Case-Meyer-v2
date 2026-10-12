@@ -47,9 +47,9 @@
     "id": "visit",
     "section": "visit",
     "heading": "Visit the house",
-    "html": "<p>Small groups are received on selected days, by appointment. A visit follows the sequence of walls, light and colour as Barragán laid it out, from the yellow gate through the house to the garden.</p>",
+    "html": "<p>Small groups are received on visiting days, booked at least eight weeks ahead. A visit follows the sequence of walls, light and colour as Barragán laid it out, from the yellow gate through the house to the garden.</p>",
     "pill": {
-      "label": "Request a visit",
+      "label": "Book a visit",
       "href": "/visit/visits/"
     },
     "photo": {

@@ -6,7 +6,7 @@
  */
 import type { Block } from '../content.config';
 import Carousel from './Carousel.astro';
-import BookingForm from './BookingForm.astro';
+import Booking from './Booking.astro';
 import { url } from '../lib/url';
 const { blocks, imageMax } = Astro.props as { blocks: Block[]; imageMax?: string };
 
@@ -55,7 +55,7 @@ const endsRow = (b: Block) => !((b.type === 'text' || b.type === 'image') && b.p
     );
     case 'video': return <div class="b-video b-video--article reveal"><iframe src={b.url} title="Video" allow="fullscreen" loading="lazy"></iframe></div>;
     case 'small': return <div class="b-small reveal" set:html={b.html} />;
-    case 'form': return <BookingForm />;
+    case 'form': return <Booking />;
     case 'downloads': return (
       <div class="dl">
         {b.groups.map((g) => (
